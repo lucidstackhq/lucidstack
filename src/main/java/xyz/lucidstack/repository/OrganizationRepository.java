@@ -7,4 +7,7 @@ import xyz.lucidstack.model.Organization;
 @Repository
 public interface OrganizationRepository extends MongoRepository<Organization, String> {
 
+    Boolean existsByName(String name);
+
+    Organization findByName(String name);
 }
