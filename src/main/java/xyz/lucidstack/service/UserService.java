@@ -1,6 +1,7 @@
 package xyz.lucidstack.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import xyz.lucidstack.auth.AuthenticatedUser;
 import xyz.lucidstack.auth.Jwt;
@@ -10,11 +11,12 @@ import xyz.lucidstack.exception.NotFoundException;
 import xyz.lucidstack.model.Organization;
 import xyz.lucidstack.model.User;
 import xyz.lucidstack.repository.UserRepository;
-import xyz.lucidstack.request.UserPasswordChangeRequest;
-import xyz.lucidstack.request.UserSignUpRequest;
-import xyz.lucidstack.request.UserTokenRequest;
+import xyz.lucidstack.request.*;
 import xyz.lucidstack.response.UserTokenResponse;
 import xyz.lucidstack.util.Password;
+import xyz.lucidstack.util.Random;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -77,5 +79,48 @@ public class UserService {
         User user = get(userId, organizationId);
         user.setPassword(Password.hash(request.getPassword()));
         return userRepository.save(user);
+    }
+
+    public UserPasswordResponse add(UserAdditionRequest request, String creatorId, String organizationId) {
+        if (userRepository.existsByUsernameAndOrganizationId(request.getUsername(), organizationId)) {
+            throw new ClientException(String.format("Username %s already exists", request.getUsername()));
+        }
+
+        String password = Random.generateRandomString(16);
+
+        User user = User.builder()
+                .username(request.getUsername())
+                .password(Password.hash(password))
+                .admin(request.getAdmin())
+                .creatorId(creatorId)
+                .organizationId(organizationId)
+                .build();
+
+        user = userRepository.save(user);
+        return UserPasswordResponse.builder().user(user).password(password).build();
+    }
+
+    public List<User> list(String organizationId, Pageable pageable) {
+        return userRepository.findByOrganizationId(organizationId, pageable);
+    }
+
+    public User updateAdmin(String userId, UserAdminUpdateRequest request, String organizationId) {
+        User user = get(userId, organizationId);
+        user.setAdmin(request.getAdmin());
+        return userRepository.save(user);
+    }
+
+    public UserPasswordResponse resetPassword(String userId, String organizationId) {
+        User user = get(userId, organizationId);
+        String password = Random.generateRandomString(16);
+        user.setPassword(Password.hash(password));
+        user = userRepository.save(user);
+        return UserPasswordResponse.builder().user(user).password(password).build();
+    }
+
+    public User delete(String userId, String organizationId) {
+        User user = get(userId, organizationId);
+        userRepository.delete(user);
+        return user;
     }
 }
