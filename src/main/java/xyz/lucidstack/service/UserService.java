@@ -6,9 +6,11 @@ import xyz.lucidstack.auth.AuthenticatedUser;
 import xyz.lucidstack.auth.Jwt;
 import xyz.lucidstack.exception.AuthenticationException;
 import xyz.lucidstack.exception.ClientException;
+import xyz.lucidstack.exception.NotFoundException;
 import xyz.lucidstack.model.Organization;
 import xyz.lucidstack.model.User;
 import xyz.lucidstack.repository.UserRepository;
+import xyz.lucidstack.request.UserPasswordChangeRequest;
 import xyz.lucidstack.request.UserSignUpRequest;
 import xyz.lucidstack.request.UserTokenRequest;
 import xyz.lucidstack.response.UserTokenResponse;
@@ -59,5 +61,21 @@ public class UserService {
                 .build());
 
         return UserTokenResponse.builder().token(token).build();
+    }
+
+    public User get(String userId, String organizationId) {
+        User user = userRepository.findByIdAndOrganizationId(userId, organizationId);
+
+        if (user == null) {
+            throw new NotFoundException("User not found");
+        }
+
+        return user;
+    }
+
+    public User changePassword(String userId, UserPasswordChangeRequest request, String organizationId) {
+        User user = get(userId, organizationId);
+        user.setPassword(Password.hash(request.getPassword()));
+        return userRepository.save(user);
     }
 }

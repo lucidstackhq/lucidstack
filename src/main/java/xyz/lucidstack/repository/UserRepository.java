@@ -8,4 +8,6 @@ import xyz.lucidstack.model.User;
 public interface UserRepository extends MongoRepository<User, String> {
 
     User findByUsernameAndOrganizationId(String username, String organizationId);
+
+    User findByIdAndOrganizationId(String id, String organizationId);
 }
