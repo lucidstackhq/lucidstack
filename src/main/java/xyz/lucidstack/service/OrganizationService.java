@@ -32,7 +32,7 @@ public class OrganizationService {
         Organization organization = organizationRepository.findByName(name);
 
         if (organization == null) {
-            throw new NotFoundException(String.format("Organization %s not found",  name));
+            throw new NotFoundException(String.format("Organization %s not found", name));
         }
 
         return organization;

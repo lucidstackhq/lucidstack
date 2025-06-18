@@ -6,7 +6,6 @@ import xyz.lucidstack.embedded.Actor;
 import xyz.lucidstack.embedded.Resource;
 import xyz.lucidstack.model.Access;
 
-import java.util.Collection;
 import java.util.Set;
 
 @Repository

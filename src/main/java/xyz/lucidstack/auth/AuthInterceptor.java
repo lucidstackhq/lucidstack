@@ -2,11 +2,11 @@ package xyz.lucidstack.auth;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import xyz.lucidstack.auth.authenticator.Authenticator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
+import xyz.lucidstack.auth.authenticator.Authenticator;
 
 import java.util.HashMap;
 import java.util.List;

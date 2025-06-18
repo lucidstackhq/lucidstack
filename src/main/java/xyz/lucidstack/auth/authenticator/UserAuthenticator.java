@@ -2,12 +2,12 @@ package xyz.lucidstack.auth.authenticator;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import xyz.lucidstack.auth.AuthenticatedUser;
 import xyz.lucidstack.auth.AuthenticatedUserController;
 import xyz.lucidstack.auth.Jwt;
 import xyz.lucidstack.auth.ThreadLocalWrapper;
 import xyz.lucidstack.exception.InvalidTokenException;
-import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 

@@ -46,8 +46,8 @@ public class AccessService {
 
     public Boolean hasPermission(Resource resource, AuthenticatedUser user, String permission) {
         return accessRepository.existsByResourceAndActorAndOrganizationIdAndPermissionsIn(resource, Actor.builder()
-                        .type(ActorType.USER)
-                        .id(user.getId())
+                .type(ActorType.USER)
+                .id(user.getId())
                 .build(), user.getOrganizationId(), Set.of(permission, "*"));
     }
 
@@ -57,7 +57,7 @@ public class AccessService {
                 .and("actor").is(Actor.builder().type(ActorType.USER).id(user.getId()).build())
                 .and("organizationId").is(user.getOrganizationId());
 
-        for(Map.Entry<String, Object> entry : resourceFilter.entrySet()) {
+        for (Map.Entry<String, Object> entry : resourceFilter.entrySet()) {
             criteria = criteria.and(String.format("resource.%s", entry.getKey())).is(entry.getValue());
         }
 

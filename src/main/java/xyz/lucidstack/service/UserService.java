@@ -57,9 +57,9 @@ public class UserService {
         }
 
         String token = jwt.getUserToken(AuthenticatedUser.builder()
-                        .id(user.getId())
-                        .organizationId(organization.getId())
-                        .admin(user.getAdmin())
+                .id(user.getId())
+                .organizationId(organization.getId())
+                .admin(user.getAdmin())
                 .build());
 
         return UserTokenResponse.builder().token(token).build();
