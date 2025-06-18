@@ -27,4 +27,9 @@ public class ProjectController extends AuthenticatedUserController {
     public List<Project> list(Pageable pageable) {
         return projectService.list(getUser(), pageable);
     }
+
+    @GetMapping("/projects/{projectId}")
+    public Project get(@PathVariable String projectId) {
+        return projectService.get(projectId, getUser());
+    }
 }

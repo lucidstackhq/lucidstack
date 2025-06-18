@@ -16,4 +16,6 @@ public interface ProjectRepository extends MongoRepository<Project, String> {
     List<Project> findByOrganizationId(String organizationId, Pageable pageable);
 
     List<Project> findByIdInAndOrganizationId(Collection<String> ids, String organizationId);
+
+    Project findByIdAndOrganizationId(String id, String organizationId);
 }

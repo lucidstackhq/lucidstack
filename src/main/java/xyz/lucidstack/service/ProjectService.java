@@ -9,6 +9,7 @@ import xyz.lucidstack.embedded.resource.ProjectResource;
 import xyz.lucidstack.embedded.resource.RootResource;
 import xyz.lucidstack.exception.ClientException;
 import xyz.lucidstack.exception.NotAllowedException;
+import xyz.lucidstack.exception.NotFoundException;
 import xyz.lucidstack.model.Project;
 import xyz.lucidstack.repository.ProjectRepository;
 import xyz.lucidstack.request.ProjectCreationRequest;
@@ -60,5 +61,19 @@ public class ProjectService {
 
             return projectRepository.findByIdInAndOrganizationId(projectIds, requester.getOrganizationId());
         }
+    }
+
+    public Project get(String projectId, AuthenticatedUser requester) {
+        if (!accessService.hasPermission(new ProjectResource(projectId), requester, "read")) {
+            throw new NotAllowedException();
+        }
+
+        Project project = projectRepository.findByIdAndOrganizationId(projectId, requester.getOrganizationId());
+
+        if (project == null) {
+            throw new NotFoundException("Project not found");
+        }
+
+        return project;
     }
 }
