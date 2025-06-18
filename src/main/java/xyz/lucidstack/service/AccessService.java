@@ -15,9 +15,11 @@ import xyz.lucidstack.model.Access;
 import xyz.lucidstack.repository.AccessRepository;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -28,7 +30,7 @@ public class AccessService {
     private final MongoTemplate mongoTemplate;
 
     public void addFullAccess(Resource resource, String userId, String organizationId) {
-        Actor actor = Actor.builder().type(ActorType.USER).id(userId).build();
+        Actor actor = Actor.builder().type(ActorType.USER).referenceId(userId).build();
 
         mongoTemplate.upsert(Query.query(Criteria
                         .where("actor").is(actor)
@@ -45,16 +47,20 @@ public class AccessService {
     }
 
     public Boolean hasPermission(Resource resource, AuthenticatedUser user, String permission) {
+        if (user.getAdmin()) {
+            return true;
+        }
+
         return accessRepository.existsByResourceAndActorAndOrganizationIdAndPermissionsIn(resource, Actor.builder()
                 .type(ActorType.USER)
-                .id(user.getId())
+                .referenceId(user.getId())
                 .build(), user.getOrganizationId(), Set.of(permission, "*"));
     }
 
     public List<Resource> listResources(Map<String, Object> resourceFilter, String permission, AuthenticatedUser user, Pageable pageable) {
         Criteria criteria = Criteria
                 .where("permissions").in("*", permission)
-                .and("actor").is(Actor.builder().type(ActorType.USER).id(user.getId()).build())
+                .and("actor").is(Actor.builder().type(ActorType.USER).referenceId(user.getId()).build())
                 .and("organizationId").is(user.getOrganizationId());
 
         for (Map.Entry<String, Object> entry : resourceFilter.entrySet()) {
@@ -62,6 +68,7 @@ public class AccessService {
         }
 
         Query query = Query.query(criteria).with(pageable);
-        return mongoTemplate.find(query, Resource.class);
+        List<Access> accesses = mongoTemplate.find(query, Access.class);
+        return accesses.stream().map(Access::getResource).toList();
     }
 }
