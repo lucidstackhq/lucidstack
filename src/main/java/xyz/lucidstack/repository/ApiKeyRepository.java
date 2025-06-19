@@ -15,4 +15,6 @@ public interface ApiKeyRepository extends MongoRepository<ApiKey, String> {
     List<ApiKey> findByProjectIdAndOrganizationId(String projectId, String organizationId, Pageable pageable);
 
     ApiKey findByIdAndProjectIdAndOrganizationId(String id, String projectId, String organizationId);
+
+    boolean existsByIdNotAndNameAndProjectIdAndOrganizationId(String id, String name, String projectId, String organizationId);
 }

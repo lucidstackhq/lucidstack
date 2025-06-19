@@ -3,6 +3,7 @@ package xyz.lucidstack.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import xyz.lucidstack.auth.AuthenticatedUser;
 import xyz.lucidstack.embedded.resource.ProjectResource;
 import xyz.lucidstack.exception.ClientException;
@@ -11,6 +12,8 @@ import xyz.lucidstack.exception.NotFoundException;
 import xyz.lucidstack.model.ApiKey;
 import xyz.lucidstack.repository.ApiKeyRepository;
 import xyz.lucidstack.request.ApiKeyCreationRequest;
+import xyz.lucidstack.request.ApiKeyUpdateRequest;
+import xyz.lucidstack.response.ApiKeySecretResponse;
 import xyz.lucidstack.util.Random;
 
 import java.util.List;
@@ -70,5 +73,38 @@ public class ApiKeyService {
         }
 
         return apiKey;
+    }
+
+    public ApiKey update(String apiKeyId, ApiKeyUpdateRequest request, String projectId, AuthenticatedUser requester) {
+        ApiKey apiKey = get(apiKeyId, projectId, requester);
+
+        if (StringUtils.hasText(request.getName())) {
+            if (apiKeyRepository.existsByIdNotAndNameAndProjectIdAndOrganizationId(apiKeyId, request.getName(), projectId, requester.getOrganizationId())) {
+                throw new ClientException(String.format("Api key %s already exists", request.getName()));
+            }
+
+            apiKey.setName(request.getName());
+        }
+
+        apiKey.setDescription(request.getDescription());
+        return apiKeyRepository.save(apiKey);
+    }
+
+    public ApiKey delete(String apiKeyId, String projectId, AuthenticatedUser requester) {
+        ApiKey apiKey = get(apiKeyId, projectId, requester);
+        apiKeyRepository.delete(apiKey);
+        return apiKey;
+    }
+
+    public ApiKeySecretResponse getSecret(String apiKeyId, String projectId, AuthenticatedUser requester) {
+        ApiKey apiKey = get(apiKeyId, projectId, requester);
+        return ApiKeySecretResponse.builder().secret(apiKey.getSecret()).build();
+    }
+
+    public ApiKeySecretResponse resetSecret(String apiKeyId, String projectId, AuthenticatedUser requester) {
+        ApiKey apiKey = get(apiKeyId, projectId, requester);
+        apiKey.setSecret(Random.generateRandomString(128));
+        apiKey = apiKeyRepository.save(apiKey);
+        return ApiKeySecretResponse.builder().secret(apiKey.getSecret()).build();
     }
 }
