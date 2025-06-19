@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import xyz.lucidstack.auth.AuthenticatedUserController;
 import xyz.lucidstack.model.Environment;
 import xyz.lucidstack.request.EnvironmentCreationRequest;
+import xyz.lucidstack.request.EnvironmentUpdateRequest;
 import xyz.lucidstack.service.EnvironmentService;
 
 import java.util.List;
@@ -32,5 +33,10 @@ public class EnvironmentController extends AuthenticatedUserController {
     @GetMapping("/environments/{environmentId}")
     public Environment get(@PathVariable String environmentId) {
         return environmentService.get(environmentId, getUser());
+    }
+
+    @PutMapping("/environments/{environmentId}")
+    public Environment update(@PathVariable String environmentId, @Valid @RequestBody EnvironmentUpdateRequest request) {
+        return environmentService.update(environmentId, request, getUser());
     }
 }

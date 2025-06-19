@@ -18,4 +18,6 @@ public interface EnvironmentRepository extends MongoRepository<Environment, Stri
     List<Environment> findByIdInAndOrganizationId(Collection<String> ids, String organizationId);
 
     Environment findByIdAndOrganizationId(String id, String organizationId);
+
+    boolean existsByIdNotAndNameAndOrganizationId(String id, String name, String organizationId);
 }

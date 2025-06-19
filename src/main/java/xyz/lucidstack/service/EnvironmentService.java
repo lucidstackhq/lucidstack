@@ -3,6 +3,7 @@ package xyz.lucidstack.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import xyz.lucidstack.auth.AuthenticatedUser;
 import xyz.lucidstack.embedded.Resource;
 import xyz.lucidstack.embedded.resource.EnvironmentResource;
@@ -13,6 +14,7 @@ import xyz.lucidstack.exception.NotFoundException;
 import xyz.lucidstack.model.Environment;
 import xyz.lucidstack.repository.EnvironmentRepository;
 import xyz.lucidstack.request.EnvironmentCreationRequest;
+import xyz.lucidstack.request.EnvironmentUpdateRequest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,5 +74,29 @@ public class EnvironmentService {
         }
 
         return environment;
+    }
+
+    public Environment update(String environmentId, EnvironmentUpdateRequest request, AuthenticatedUser requester) {
+        if (!accessService.hasPermission(new EnvironmentResource(environmentId), requester, "update")) {
+            throw new NotAllowedException();
+        }
+
+        Environment environment = environmentRepository.findByIdAndOrganizationId(environmentId, requester.getOrganizationId());
+
+        if (environment == null) {
+            throw new NotFoundException("Environment not found");
+        }
+
+        if (StringUtils.hasText(request.getName())) {
+            if (environmentRepository.existsByIdNotAndNameAndOrganizationId(environmentId, request.getName(), requester.getOrganizationId())) {
+                throw new ClientException(String.format("Environment %s already exists", request.getName()));
+            }
+
+            environment.setName(request.getName());
+        }
+
+        environment.setDescription(request.getDescription());
+
+        return environmentRepository.save(environment);
     }
 }
