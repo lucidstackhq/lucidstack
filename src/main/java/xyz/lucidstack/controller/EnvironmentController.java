@@ -39,4 +39,9 @@ public class EnvironmentController extends AuthenticatedUserController {
     public Environment update(@PathVariable String environmentId, @Valid @RequestBody EnvironmentUpdateRequest request) {
         return environmentService.update(environmentId, request, getUser());
     }
+
+    @DeleteMapping("/environments/{environmentId}")
+    public Environment delete(@PathVariable String environmentId) {
+        return environmentService.delete(environmentId, getUser());
+    }
 }

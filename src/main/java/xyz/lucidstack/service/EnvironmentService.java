@@ -99,4 +99,19 @@ public class EnvironmentService {
 
         return environmentRepository.save(environment);
     }
+
+    public Environment delete(String environmentId, AuthenticatedUser requester) {
+        if (!accessService.hasPermission(new EnvironmentResource(environmentId), requester, "delete")) {
+            throw new NotAllowedException();
+        }
+
+        Environment environment = environmentRepository.findByIdAndOrganizationId(environmentId, requester.getOrganizationId());
+
+        if (environment == null) {
+            throw new NotFoundException("Environment not found");
+        }
+
+        environmentRepository.delete(environment);
+        return environment;
+    }
 }
