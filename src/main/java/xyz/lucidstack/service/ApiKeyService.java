@@ -1,6 +1,7 @@
 package xyz.lucidstack.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import xyz.lucidstack.auth.AuthenticatedUser;
 import xyz.lucidstack.embedded.resource.ProjectResource;
@@ -11,6 +12,8 @@ import xyz.lucidstack.model.ApiKey;
 import xyz.lucidstack.repository.ApiKeyRepository;
 import xyz.lucidstack.request.ApiKeyCreationRequest;
 import xyz.lucidstack.util.Random;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -45,5 +48,13 @@ public class ApiKeyService {
                 .build();
 
         return apiKeyRepository.save(apiKey);
+    }
+
+    public List<ApiKey> list(String projectId, AuthenticatedUser requester, Pageable pageable) {
+        if (!accessService.hasPermission(new ProjectResource(projectId), requester, "manage_api_keys")) {
+            throw new NotAllowedException();
+        }
+
+        return apiKeyRepository.findByProjectIdAndOrganizationId(projectId, requester.getOrganizationId(), pageable);
     }
 }
