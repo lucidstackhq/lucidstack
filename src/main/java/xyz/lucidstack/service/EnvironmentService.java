@@ -9,6 +9,7 @@ import xyz.lucidstack.embedded.resource.EnvironmentResource;
 import xyz.lucidstack.embedded.resource.RootResource;
 import xyz.lucidstack.exception.ClientException;
 import xyz.lucidstack.exception.NotAllowedException;
+import xyz.lucidstack.exception.NotFoundException;
 import xyz.lucidstack.model.Environment;
 import xyz.lucidstack.repository.EnvironmentRepository;
 import xyz.lucidstack.request.EnvironmentCreationRequest;
@@ -57,5 +58,19 @@ public class EnvironmentService {
 
             return environmentRepository.findByIdInAndOrganizationId(environmentIds, requester.getOrganizationId());
         }
+    }
+
+    public Environment get(String environmentId, AuthenticatedUser requester) {
+        if (!accessService.hasPermission(new EnvironmentResource(environmentId), requester, "read")) {
+            throw new NotAllowedException();
+        }
+
+        Environment environment = environmentRepository.findByIdAndOrganizationId(environmentId, requester.getOrganizationId());
+
+        if (environment == null) {
+            throw new NotFoundException("Environment not found");
+        }
+
+        return environment;
     }
 }

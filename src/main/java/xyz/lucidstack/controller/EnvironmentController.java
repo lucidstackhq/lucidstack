@@ -28,4 +28,9 @@ public class EnvironmentController extends AuthenticatedUserController {
     public List<Environment> list(Pageable pageable) {
         return environmentService.list(getUser(), pageable);
     }
+
+    @GetMapping("/environments/{environmentId}")
+    public Environment get(@PathVariable String environmentId) {
+        return environmentService.get(environmentId, getUser());
+    }
 }

@@ -16,4 +16,6 @@ public interface EnvironmentRepository extends MongoRepository<Environment, Stri
     List<Environment> findByOrganizationId(String organizationId, Pageable pageable);
 
     List<Environment> findByIdInAndOrganizationId(Collection<String> ids, String organizationId);
+
+    Environment findByIdAndOrganizationId(String id, String organizationId);
 }
