@@ -20,4 +20,6 @@ public interface ProjectRepository extends MongoRepository<Project, String> {
     Project findByIdAndOrganizationId(String id, String organizationId);
 
     boolean existsByIdNotAndNameAndOrganizationId(String id, String name, String organizationId);
+
+    Boolean existsByIdAndOrganizationId(String id, String organizationId);
 }

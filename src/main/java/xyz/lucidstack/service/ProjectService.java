@@ -118,4 +118,8 @@ public class ProjectService {
 
         return project;
     }
+
+    public Boolean exists(String projectId, String organizationId) {
+        return projectRepository.existsByIdAndOrganizationId(projectId, organizationId);
+    }
 }
