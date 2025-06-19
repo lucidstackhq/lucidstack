@@ -18,4 +18,6 @@ public interface ProjectRepository extends MongoRepository<Project, String> {
     List<Project> findByIdInAndOrganizationId(Collection<String> ids, String organizationId);
 
     Project findByIdAndOrganizationId(String id, String organizationId);
+
+    boolean existsByIdNotAndNameAndOrganizationId(String id, String name, String organizationId);
 }

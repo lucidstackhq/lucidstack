@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import xyz.lucidstack.auth.AuthenticatedUserController;
 import xyz.lucidstack.model.Project;
 import xyz.lucidstack.request.ProjectCreationRequest;
+import xyz.lucidstack.request.ProjectUpdateRequest;
 import xyz.lucidstack.service.ProjectService;
 
 import java.util.List;
@@ -31,5 +32,10 @@ public class ProjectController extends AuthenticatedUserController {
     @GetMapping("/projects/{projectId}")
     public Project get(@PathVariable String projectId) {
         return projectService.get(projectId, getUser());
+    }
+
+    @PutMapping("/projects/{projectId}")
+    public Project update(@PathVariable String projectId, @Valid @RequestBody ProjectUpdateRequest request) {
+        return projectService.update(projectId, request, getUser());
     }
 }

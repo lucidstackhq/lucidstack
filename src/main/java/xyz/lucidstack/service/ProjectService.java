@@ -3,6 +3,7 @@ package xyz.lucidstack.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import xyz.lucidstack.auth.AuthenticatedUser;
 import xyz.lucidstack.embedded.Resource;
 import xyz.lucidstack.embedded.resource.ProjectResource;
@@ -13,6 +14,7 @@ import xyz.lucidstack.exception.NotFoundException;
 import xyz.lucidstack.model.Project;
 import xyz.lucidstack.repository.ProjectRepository;
 import xyz.lucidstack.request.ProjectCreationRequest;
+import xyz.lucidstack.request.ProjectUpdateRequest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,5 +77,29 @@ public class ProjectService {
         }
 
         return project;
+    }
+
+    public Project update(String projectId, ProjectUpdateRequest request, AuthenticatedUser requester) {
+        if (!accessService.hasPermission(new ProjectResource(projectId), requester, "update")) {
+            throw new NotAllowedException();
+        }
+
+        Project project = projectRepository.findByIdAndOrganizationId(projectId, requester.getOrganizationId());
+
+        if  (project == null) {
+            throw new NotFoundException("Project not found");
+        }
+
+        if (StringUtils.hasText(request.getName())) {
+            if (projectRepository.existsByIdNotAndNameAndOrganizationId(projectId, request.getName(),  requester.getOrganizationId())) {
+                throw new ClientException(String.format("Project %s already exists", request.getName()));
+            }
+
+            project.setName(request.getName());
+        }
+
+        project.setDescription(request.getDescription());
+
+        return projectRepository.save(project);
     }
 }
