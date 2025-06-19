@@ -27,4 +27,9 @@ public class ApiKeyController extends AuthenticatedUserController {
     public List<ApiKey> list(@PathVariable String projectId, Pageable pageable) {
         return apiKeyService.list(projectId, getUser(), pageable);
     }
+
+    @GetMapping("/api-keys/{apiKeyId}")
+    public ApiKey get(@PathVariable String  projectId, @PathVariable String apiKeyId) {
+        return apiKeyService.get(apiKeyId, projectId, getUser());
+    }
 }

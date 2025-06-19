@@ -57,4 +57,18 @@ public class ApiKeyService {
 
         return apiKeyRepository.findByProjectIdAndOrganizationId(projectId, requester.getOrganizationId(), pageable);
     }
+
+    public ApiKey get(String apiKeyId, String projectId, AuthenticatedUser requester) {
+        if (!accessService.hasPermission(new ProjectResource(projectId), requester, "manage_api_keys")) {
+            throw new NotAllowedException();
+        }
+
+        ApiKey apiKey = apiKeyRepository.findByIdAndProjectIdAndOrganizationId(apiKeyId, projectId, requester.getOrganizationId());
+
+        if (apiKey == null) {
+            throw new NotFoundException("Api key not found");
+        }
+
+        return apiKey;
+    }
 }
