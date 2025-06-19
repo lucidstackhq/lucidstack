@@ -29,7 +29,7 @@ public class ProjectService {
     private final AccessService accessService;
 
     public Project create(ProjectCreationRequest request, AuthenticatedUser creator) {
-        if (!accessService.hasPermission(new RootResource(), creator, "create")) {
+        if (!accessService.hasPermission(new RootResource(), creator, "create_project")) {
             throw new NotAllowedException();
         }
 
