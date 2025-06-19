@@ -102,4 +102,20 @@ public class ProjectService {
 
         return projectRepository.save(project);
     }
+
+    public Project delete(String projectId, AuthenticatedUser requester) {
+        if (!accessService.hasPermission(new ProjectResource(projectId), requester, "delete")) {
+            throw new NotAllowedException();
+        }
+
+        Project project = projectRepository.findByIdAndOrganizationId(projectId, requester.getOrganizationId());
+
+        if (project == null) {
+            throw new NotFoundException("Project not found");
+        }
+
+        projectRepository.delete(project);
+
+        return project;
+    }
 }

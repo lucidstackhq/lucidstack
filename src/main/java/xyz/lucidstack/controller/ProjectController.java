@@ -38,4 +38,9 @@ public class ProjectController extends AuthenticatedUserController {
     public Project update(@PathVariable String projectId, @Valid @RequestBody ProjectUpdateRequest request) {
         return projectService.update(projectId, request, getUser());
     }
+
+    @DeleteMapping("/projects/{projectId}")
+    public Project delete(@PathVariable String projectId) {
+        return projectService.delete(projectId, getUser());
+    }
 }
