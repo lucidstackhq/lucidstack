@@ -30,10 +30,6 @@ public class AccessService {
 
     private final MongoTemplate mongoTemplate;
 
-    private final UserService userService;
-
-    private final ApiKeyService apiKeyService;
-
     public void addFullAccess(Resource resource, String userId, String organizationId) {
         Actor actor = Actor.builder().type(ActorType.USER).referenceId(userId).build();
 
@@ -52,10 +48,6 @@ public class AccessService {
     }
 
     public void addPermission(Resource resource, String userId, Set<String> permissions, String organizationId) {
-        if (!userService.exists(userId, organizationId)) {
-            throw new NotFoundException("User not found");
-        }
-
         Actor actor = Actor.builder().type(ActorType.USER).referenceId(userId).build();
 
         mongoTemplate.upsert(Query.query(Criteria
@@ -85,60 +77,8 @@ public class AccessService {
                 Access.class);
     }
 
-    public List<AccessResponse> listForResource(Resource resource, String organizationId, Pageable pageable) {
-        List<Access> accesses = accessRepository.findByResourceAndOrganizationId(resource, organizationId, pageable);
-
-        List<String> userIds = new ArrayList<>();
-        List<String> apiKeyIds = new ArrayList<>();
-
-        for (Access access : accesses) {
-            switch (access.getActor().getType()) {
-                case USER:
-                    userIds.add(access.getActor().getReferenceId());
-                    break;
-                case API_KEY:
-                    apiKeyIds.add(access.getActor().getReferenceId());
-                    break;
-                default:
-                    throw new ServerException("Invalid actor type");
-            }
-        }
-
-        Map<String, User> userMap = new HashMap<>();
-        Map<String, ApiKey> apiKeyMap = new HashMap<>();
-
-        if (!userIds.isEmpty()) {
-            List<User> users = userService.get(userIds, organizationId);
-            for (User user : users) {
-                userMap.put(user.getId(), user);
-            }
-        }
-
-        if (!apiKeyIds.isEmpty()) {
-            List<ApiKey> apiKeys = apiKeyService.get(apiKeyIds, organizationId);
-            for (ApiKey apiKey : apiKeys) {
-                apiKeyMap.put(apiKey.getId(), apiKey);
-            }
-        }
-
-        List<AccessResponse> accessesResponse = new ArrayList<>();
-
-        for (Access access : accesses) {
-            switch (access.getActor().getType()) {
-                case USER:
-                    User user = userMap.get(access.getActor().getReferenceId());
-                    accessesResponse.add(AccessResponse.builder().access(access).actorData(user).build());
-                    break;
-                case API_KEY:
-                    ApiKey apiKey = apiKeyMap.get(access.getActor().getReferenceId());
-                    accessesResponse.add(AccessResponse.builder().access(access).actorData(apiKey).build());
-                    break;
-                default:
-                    throw new ServerException("Invalid actor type");
-            }
-        }
-
-        return accessesResponse;
+    public List<Access> listForResource(Resource resource, String organizationId, Pageable pageable) {
+        return accessRepository.findByResourceAndOrganizationId(resource, organizationId, pageable);
     }
 
     public Boolean hasPermission(Resource resource, AuthenticatedUser user, String permission) {
