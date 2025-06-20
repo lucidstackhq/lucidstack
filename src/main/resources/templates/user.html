@@ -10,6 +10,7 @@
             <hr>
             <h5 style="margin-top: 3rem">Administrator Access</h5>
             <hr>
+            <div id="update-admin-message"></div>
             <div class="form-check form-switch">
                 <input class="form-check-input" type="checkbox" id="admin">
                 <label class="form-check-label" for="admin">Administrator</label>
@@ -31,6 +32,16 @@
         getUser(userId, function (data) {
             $("#username").html(data.username)
             $("#admin").prop('checked', data.admin)
+        })
+
+        $("#admin").change(function () {
+            let admin = $("#admin").is(":checked")
+
+            updateUserAdmin(userId, admin, function (data) {
+                displaySuccess($("#update-admin-message"), "Administrator access changed successfully")
+            }, function (data) {
+                displayError($("#update-admin-message"), data.responseJSON.message)
+            })
         })
     })
 </script>

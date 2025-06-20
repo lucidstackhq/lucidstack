@@ -143,8 +143,19 @@ function getUser(userId, success, error) {
     })
 }
 
-function updateUserAdmin() {
-
+function updateUserAdmin(userId, admin, success, error) {
+    $.ajax({
+        url: `/api/v1/users/${userId}/admin`,
+        method: "PUT",
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        data: JSON.stringify({
+            admin,
+        }),
+        success: success,
+        error: error,
+    })
 }
 
 function resetUserPassword() {
