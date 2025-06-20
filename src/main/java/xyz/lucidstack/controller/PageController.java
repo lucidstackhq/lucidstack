@@ -58,4 +58,10 @@ public class PageController {
     public String environments() {
         return "environments";
     }
+
+    @GetMapping("/environments/{environmentId}")
+    public String environment(@PathVariable String environmentId, Model model) {
+        model.addAttribute("environmentId", environmentId);
+        return "environment";
+    }
 }
