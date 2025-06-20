@@ -40,4 +40,9 @@ public class PageController {
     public String organization() {
         return "organization";
     }
+
+    @GetMapping("/users")
+    public String users() {
+        return "users";
+    }
 }

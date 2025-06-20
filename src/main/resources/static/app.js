@@ -98,3 +98,35 @@ function updateOrganization(billingEmail, success, error) {
         error: error,
     })
 }
+
+function addUser(username, admin, success, error) {
+    $.ajax({
+        url: "/api/v1/users",
+        method: "POST",
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        data: JSON.stringify({
+            username,
+            admin,
+        }),
+        success: success,
+        error: error,
+    })
+}
+
+function listUsers(page, size, success, error) {
+    $.ajax({
+        url: "/api/v1/users",
+        method: "GET",
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        data: {
+            page,
+            size,
+        },
+        success: success,
+        error: error,
+    })
+}
