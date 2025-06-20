@@ -52,8 +52,8 @@ public class EnvironmentService {
             return environmentRepository.findByOrganizationId(requester.getOrganizationId(), pageable);
         } else {
             List<String> environmentIds = new ArrayList<>();
-            List<Resource> resources = accessService.listResources(Map.of("type", "environment"), "read",  requester, pageable);
-            for (Resource resource: resources) {
+            List<Resource> resources = accessService.listResources(Map.of("type", "environment"), "read", requester, pageable);
+            for (Resource resource : resources) {
                 EnvironmentResource environmentResource = (EnvironmentResource) resource;
                 environmentIds.add(environmentResource.getEnvironmentId());
             }

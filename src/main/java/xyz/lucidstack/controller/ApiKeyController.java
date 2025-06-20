@@ -31,7 +31,7 @@ public class ApiKeyController extends AuthenticatedUserController {
     }
 
     @GetMapping("/api-keys/{apiKeyId}")
-    public ApiKey get(@PathVariable String  projectId, @PathVariable String apiKeyId) {
+    public ApiKey get(@PathVariable String projectId, @PathVariable String apiKeyId) {
         return apiKeyService.get(apiKeyId, projectId, getUser());
     }
 
@@ -46,7 +46,7 @@ public class ApiKeyController extends AuthenticatedUserController {
     }
 
     @GetMapping("/api-keys/{apiKeyId}/secret")
-    public ApiKeySecretResponse getSecret(@PathVariable String  projectId, @PathVariable String apiKeyId) {
+    public ApiKeySecretResponse getSecret(@PathVariable String projectId, @PathVariable String apiKeyId) {
         return apiKeyService.getSecret(apiKeyId, projectId, getUser());
     }
 

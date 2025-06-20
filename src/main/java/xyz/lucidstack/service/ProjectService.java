@@ -56,7 +56,7 @@ public class ProjectService {
         } else {
             List<String> projectIds = new ArrayList<>();
             List<Resource> resources = accessService.listResources(Map.of("type", "project"), "read", requester, pageable);
-            for (Resource resource: resources) {
+            for (Resource resource : resources) {
                 ProjectResource projectResource = (ProjectResource) resource;
                 projectIds.add(projectResource.getProjectId());
             }
@@ -86,12 +86,12 @@ public class ProjectService {
 
         Project project = projectRepository.findByIdAndOrganizationId(projectId, requester.getOrganizationId());
 
-        if  (project == null) {
+        if (project == null) {
             throw new NotFoundException("Project not found");
         }
 
         if (StringUtils.hasText(request.getName())) {
-            if (projectRepository.existsByIdNotAndNameAndOrganizationId(projectId, request.getName(),  requester.getOrganizationId())) {
+            if (projectRepository.existsByIdNotAndNameAndOrganizationId(projectId, request.getName(), requester.getOrganizationId())) {
                 throw new ClientException(String.format("Project %s already exists", request.getName()));
             }
 
