@@ -25,4 +25,9 @@ public class PageController {
     public String join() {
         return "join";
     }
+
+    @GetMapping("/home")
+    public String home() {
+        return "home";
+    }
 }
