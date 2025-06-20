@@ -16,6 +16,7 @@ import xyz.lucidstack.response.UserTokenResponse;
 import xyz.lucidstack.util.Password;
 import xyz.lucidstack.util.Random;
 
+import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -122,5 +123,13 @@ public class UserService {
         User user = get(userId, organizationId);
         userRepository.delete(user);
         return user;
+    }
+
+    public List<User> get(Collection<String> userIds, String organizationId) {
+        return userRepository.findByIdInAndOrganizationId(userIds, organizationId);
+    }
+
+    public Boolean exists(String userId, String organizationId) {
+        return userRepository.existsByIdAndOrganizationId(userId, organizationId);
     }
 }

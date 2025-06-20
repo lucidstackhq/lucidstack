@@ -5,6 +5,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 import xyz.lucidstack.model.ApiKey;
 
+import java.util.Collection;
 import java.util.List;
 
 @Repository
@@ -17,4 +18,6 @@ public interface ApiKeyRepository extends MongoRepository<ApiKey, String> {
     ApiKey findByIdAndProjectIdAndOrganizationId(String id, String projectId, String organizationId);
 
     boolean existsByIdNotAndNameAndProjectIdAndOrganizationId(String id, String name, String projectId, String organizationId);
+
+    List<ApiKey> findByIdInAndOrganizationId(Collection<String> ids, String organizationId);
 }

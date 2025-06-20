@@ -16,6 +16,7 @@ import xyz.lucidstack.request.ApiKeyUpdateRequest;
 import xyz.lucidstack.response.ApiKeySecretResponse;
 import xyz.lucidstack.util.Random;
 
+import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -106,5 +107,9 @@ public class ApiKeyService {
         apiKey.setSecret(Random.generateRandomString(128));
         apiKey = apiKeyRepository.save(apiKey);
         return ApiKeySecretResponse.builder().secret(apiKey.getSecret()).build();
+    }
+
+    public List<ApiKey> get(Collection<String> apiKeyIds, String organizationId) {
+        return apiKeyRepository.findByIdInAndOrganizationId(apiKeyIds, organizationId);
     }
 }
