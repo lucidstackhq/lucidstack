@@ -130,3 +130,27 @@ function listUsers(page, size, success, error) {
         error: error,
     })
 }
+
+function getUser(userId, success, error) {
+    $.ajax({
+        url: `/api/v1/users/${userId}`,
+        method: "GET",
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        success: success,
+        error: error,
+    })
+}
+
+function updateUserAdmin() {
+
+}
+
+function resetUserPassword() {
+
+}
+
+function deleteUser() {
+
+}

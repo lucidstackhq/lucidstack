@@ -1,7 +1,9 @@
 package xyz.lucidstack.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
 public class PageController {
@@ -44,5 +46,11 @@ public class PageController {
     @GetMapping("/users")
     public String users() {
         return "users";
+    }
+
+    @GetMapping("/users/{userId}")
+    public String user(@PathVariable String userId, Model model) {
+        model.addAttribute("userId", userId);
+        return "user";
     }
 }

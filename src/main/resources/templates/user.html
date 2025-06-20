@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<div th:replace="~{header}"></div>
+<body>
+<div th:replace="~{navbar}"></div>
+<div class="container">
+    <div class="row" style="margin-top: 3rem">
+        <div class="col-lg-6 offset-lg-3">
+            <h2 id="username"></h2>
+            <hr>
+            <h5 style="margin-top: 3rem">Administrator Access</h5>
+            <hr>
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="admin">
+                <label class="form-check-label" for="admin">Administrator</label>
+            </div>
+            <h5 style="margin-top: 3rem">Password Management</h5>
+            <hr>
+            <button class="btn btn-primary">Change Password</button>
+            <h5 style="margin-top: 3rem">Danger Zone</h5>
+            <hr>
+            <button class="btn btn-danger">Delete User</button>
+        </div>
+    </div>
+</div>
+<div th:replace="~{footer}"></div>
+<script type="text/javascript">
+    const userId = "[[${userId}]]"
+
+    $(document).ready(function () {
+        getUser(userId, function (data) {
+            $("#username").html(data.username)
+            $("#admin").prop('checked', data.admin)
+        })
+    })
+</script>
+</body>
+</html>
