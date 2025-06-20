@@ -158,10 +158,26 @@ function updateUserAdmin(userId, admin, success, error) {
     })
 }
 
-function resetUserPassword() {
-
+function resetUserPassword(userId, success, error) {
+    $.ajax({
+        url: `/api/v1/users/${userId}/password`,
+        method: "PUT",
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        success: success,
+        error: error,
+    })
 }
 
-function deleteUser() {
-
+function deleteUser(userId, success, error) {
+    $.ajax({
+        url: `/api/v1/users/${userId}`,
+        method: "DELETE",
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        success: success,
+        error: error,
+    })
 }

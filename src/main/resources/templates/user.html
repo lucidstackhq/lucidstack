@@ -17,10 +17,50 @@
             </div>
             <h5 style="margin-top: 3rem">Password Management</h5>
             <hr>
-            <button class="btn btn-primary">Change Password</button>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#reset-password-modal">Reset Password</button>
             <h5 style="margin-top: 3rem">Danger Zone</h5>
             <hr>
-            <button class="btn btn-danger">Delete User</button>
+            <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-user-modal">Delete User</button>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="reset-password-modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Reset Password</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="reset-password-message"></div>
+                <p>Are you sure you want to reset this user's password?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="reset-password-btn">Reset Password</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="delete-user-modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Delete User</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="delete-user-message"></div>
+                <p>Are you sure you want to permanently delete this user?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" id="delete-user-btn">Delete User</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
         </div>
     </div>
 </div>
@@ -41,6 +81,24 @@
                 displaySuccess($("#update-admin-message"), "Administrator access changed successfully")
             }, function (data) {
                 displayError($("#update-admin-message"), data.responseJSON.message)
+            })
+        })
+
+        $("#reset-password-btn").click(function (e) {
+            e.preventDefault()
+            resetUserPassword(userId, function (data) {
+                displaySuccess($("#reset-password-message"), `Password reset successfully, new password is <pre>${data.password}</pre>`)
+            }, function (data) {
+                displayError($("#reset-password-message"), data.responseJSON.message)
+            })
+        })
+
+        $("#delete-user-btn").click(function (e) {
+            e.preventDefault()
+            deleteUser(userId, function (data) {
+                window.location.href = "/users"
+            }, function (data) {
+                displayError($("#delete-user-message"), data.responseJSON.message)
             })
         })
     })
