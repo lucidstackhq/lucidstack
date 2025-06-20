@@ -6,6 +6,12 @@ function displaySuccess(parent, message) {
     parent.html(`<div class="alert alert-success">${message}</div>`);
 }
 
+function getHeaders() {
+    return {
+        Authorization: 'Bearer ' + localStorage.getItem('token'),
+    }
+}
+
 function userSignUp(username, password, organizationName, billingEmail, success, error) {
     $.ajax({
         url: "/api/v1/users/signup",
@@ -33,6 +39,33 @@ function getUserToken(username, password, organizationName, success, error) {
             username,
             password,
             organizationName,
+        }),
+        success: success,
+        error: error,
+    })
+}
+
+function getCurrentUser(success, error) {
+    $.ajax({
+        url: "/api/v1/users/me",
+        method: "GET",
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        success: success,
+        error: error,
+    })
+}
+
+function changeCurrentUserPassword(password, success, error) {
+    $.ajax({
+        url: "/api/v1/users/me/password",
+        method: "PUT",
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        data: JSON.stringify({
+            password,
         }),
         success: success,
         error: error,

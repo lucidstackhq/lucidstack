@@ -30,4 +30,9 @@ public class PageController {
     public String home() {
         return "home";
     }
+
+    @GetMapping("/account")
+    public String account() {
+        return "account";
+    }
 }
