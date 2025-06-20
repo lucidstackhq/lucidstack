@@ -53,4 +53,9 @@ public class PageController {
         model.addAttribute("userId", userId);
         return "user";
     }
+
+    @GetMapping("/environments")
+    public String environments() {
+        return "environments";
+    }
 }

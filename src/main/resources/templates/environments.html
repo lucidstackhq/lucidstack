@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<div th:replace="~{header}"></div>
+<body>
+<div th:replace="~{navbar}"></div>
+<div class="container">
+    <div class="row" style="margin-top: 2em;">
+        <div class="col-lg-6 offset-lg-3">
+            <div class="row">
+                <div class="col-lg-6">
+                    <h2>Environments</h2>
+                </div>
+                <div class="col-lg-6">
+                    <button class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#add-environment-modal">New Environment</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <hr>
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Manage</th>
+                        </tr>
+                        </thead>
+                        <tbody id="environments"></tbody>
+                    </table>
+                    <button class="btn btn-outline-secondary w-100" id="load-more-btn">Load More Environments</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="add-environment-modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add New Environment</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="add-environment-message"></div>
+                <form>
+                    <div class="mb-3 form-floating">
+                        <input type="text" class="form-control" id="name" placeholder="Name">
+                        <label for="name" class="form-label">Name</label>
+                    </div>
+                    <div class="mb-3 form-floating">
+                        <textarea class="form-control" id="description" rows="3" placeholder="Description" style="height: 100px"></textarea>
+                        <label for="description" class="form-label">Description</label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="add-environment-btn">Add Environment</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/x-handlebars-template" id="environments-template">
+    {{#each environments}}
+        <tr>
+            <td>{{name}}</td>
+            <td>
+                <a href="/environments/{{id}}" class="btn btn-secondary btn-sm">Manage</a>
+            </td>
+        </tr>
+    {{/each}}
+</script>
+<div th:replace="~{footer}"></div>
+<script type="text/javascript">
+    const environmentsTemplate = Handlebars.compile($("#environments-template").html())
+
+    function renderEnvironments(page, size) {
+        listEnvironments(page, size, function (data) {
+            $("#environments").append(environmentsTemplate({environments: data}));
+            if (data.length < size) {
+                $("#load-more-btn").hide()
+            }
+        })
+    }
+
+    $(document).ready(function () {
+        let currentPage = 0
+        let pageSize = 50
+        renderEnvironments(currentPage, pageSize)
+        $("#load-more-btn").click(function (e) {
+            e.preventDefault()
+            currentPage = currentPage + 1
+            renderEnvironments(currentPage, pageSize)
+        })
+
+        $("#add-environment-btn").click(function (e) {
+            e.preventDefault()
+            let name = $("#name").val().trim()
+            let description = $("#description").val()
+
+            if (name === "") {
+                displayError($("#add-environment-message"), "Name is required")
+                return
+            }
+
+            createEnvironment(name, description, function (data) {
+                displaySuccess($("#add-environment-message"), "Environment added successfully")
+                $("#environments").prepend(environmentsTemplate({environments: [data]}))
+            }, function (data) {
+                displayError($("#add-environment-message"), data.responseJSON.message)
+            })
+        })
+    })
+</script>
+</body>
+</html>
