@@ -71,3 +71,30 @@ function changeCurrentUserPassword(password, success, error) {
         error: error,
     })
 }
+
+function getOrganization(success, error) {
+    $.ajax({
+        url: "/api/v1/organization",
+        method: "GET",
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        success: success,
+        error: error,
+    })
+}
+
+function updateOrganization(billingEmail, success, error) {
+    $.ajax({
+        url: "/api/v1/organization",
+        method: "PUT",
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        data: JSON.stringify({
+            billingEmail,
+        }),
+        success: success,
+        error: error,
+    })
+}

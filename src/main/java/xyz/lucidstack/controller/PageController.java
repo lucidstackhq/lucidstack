@@ -35,4 +35,9 @@ public class PageController {
     public String account() {
         return "account";
     }
+
+    @GetMapping("/organization")
+    public String organization() {
+        return "organization";
+    }
 }
