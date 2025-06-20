@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<div th:replace="~{public-header}"></div>
+<body>
+<div th:replace="~{public-navbar}"></div>
+<div class="container">
+    <div class="row" style="margin-top: 5rem;">
+        <div class="col-lg-4 offset-lg-4">
+            <div class="card">
+                <div class="card-body">
+                    <h4>Sign Up For A New Account</h4>
+                    <hr>
+                    <div id="message"></div>
+                    <form>
+                        <div class="mb-3 form-floating">
+                            <input type="text" class="form-control" id="organization-name" placeholder="Organization Name">
+                            <label for="organization-name" class="form-label">Organization Name</label>
+                        </div>
+                        <div class="mb-3 form-floating">
+                            <input type="text" class="form-control" id="username" name="username" placeholder="Username">
+                            <label for="username">Username</label>
+                        </div>
+                        <div class="mb-3 form-floating">
+                            <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+                            <label for="password">Password</label>
+                        </div>
+                        <div class="mb-3 form-floating">
+                            <input type="email" class="form-control" id="billing-email" name="billing-email" placeholder="Billing Email">
+                            <label for="billing-email">Billing Email</label>
+                        </div>
+                        <div class="mb-3">
+                            <button class="btn btn-primary w-100" id="join-btn">Sign Up For A New Account</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="~{public-footer}"></div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#join-btn").click(function (e) {
+            e.preventDefault();
+
+            let username = $("#username").val().trim()
+            let password = $("#password").val().trim()
+            let organizationName = $("#organization-name").val().trim()
+            let billingEmail = $("#billing-email").val().trim()
+
+            if (organizationName === "") {
+                displayError($("#message"), "Organization name is required")
+                return
+            }
+
+            if (username === "") {
+                displayError($("#message"), "Username is required")
+                return
+            }
+
+            if (password === "") {
+                displayError($("#message"), "Password is required")
+                return
+            }
+
+            if (billingEmail === "") {
+                displayError($("#message"), "Billing email is required")
+                return
+            }
+
+            userSignUp(username, password, organizationName, billingEmail, function (data) {
+                displaySuccess($("#message"), "Account created successfully, please <a href='/login'>log in</a> to continue")
+            }, function (data) {
+                displayError($("#message"), data.responseJSON.message)
+            })
+        })
+    })
+</script>
+</body>
+</html>

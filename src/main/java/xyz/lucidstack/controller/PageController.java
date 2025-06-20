@@ -20,4 +20,9 @@ public class PageController {
     public String logout() {
         return "logout";
     }
+
+    @GetMapping("/join")
+    public String join() {
+        return "join";
+    }
 }
