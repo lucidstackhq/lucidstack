@@ -181,3 +181,243 @@ function deleteUser(userId, success, error) {
         error: error,
     })
 }
+
+function createEnvironment(name, description, success, error) {
+    $.ajax({
+        url: `/api/v1/environments`,
+        method: "POST",
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        data: JSON.stringify({
+            name,
+            description,
+        }),
+        success: success,
+        error: error,
+    })
+}
+
+function listEnvironments(page, size, success, error) {
+    $.ajax({
+        url: "/api/v1/environments",
+        method: "GET",
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        data: {
+            page,
+            size,
+        },
+        success: success,
+        error: error,
+    })
+}
+
+function getEnvironment(environmentId, success, error) {
+    $.ajax({
+        url: `/api/v1/environments/${environmentId}`,
+        method: "GET",
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        success: success,
+        error: error,
+    })
+}
+
+function updateEnvironment(environmentId, name, description, success, error) {
+    $.ajax({
+        url: `/api/v1/environments/${environmentId}`,
+        method: "PUT",
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        data: JSON.stringify({
+            name,
+            description,
+        }),
+        success: success,
+        error: error,
+    })
+}
+
+function deleteEnvironment(environmentId, success, error) {
+    $.ajax({
+        url: `/api/v1/environments/${environmentId}`,
+        method: "DELETE",
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        success: success,
+        error: error,
+    })
+}
+
+function createProject(name, description, success, error) {
+    $.ajax({
+        url: `/api/v1/projects`,
+        method: "POST",
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        data: JSON.stringify({
+            name,
+            description,
+        }),
+        success: success,
+        error: error,
+    })
+}
+
+function listProjects(page, size, success, error) {
+    $.ajax({
+        url: "/api/v1/projects",
+        method: "GET",
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        data: {
+            page,
+            size,
+        },
+        success: success,
+        error: error,
+    })
+}
+
+function getProject(projectId, success, error) {
+    $.ajax({
+        url: `/api/v1/projects/${projectId}`,
+        method: "GET",
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        success: success,
+        error: error,
+    })
+}
+
+function updateProject(projectId, name, description, success, error) {
+    $.ajax({
+        url: `/api/v1/projects/${projectId}`,
+        method: "PUT",
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        data: JSON.stringify({
+            name,
+            description,
+        }),
+        success: success,
+        error: error,
+    })
+}
+
+function deleteProject(projectId, success, error) {
+    $.ajax({
+        url: `/api/v1/projects/${projectId}`,
+        method: "DELETE",
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        success: success,
+        error: error,
+    })
+}
+
+function createApiKey(projectId, name, description, success, error) {
+    $.ajax({
+        url: `/api/v1/projects/${projectId}/api-keys`,
+        method: "POST",
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        data: JSON.stringify({
+            name,
+            description,
+        }),
+        success: success,
+        error: error,
+    })
+}
+
+function listApiKeys(projectId, page, size, success, error) {
+    $.ajax({
+        url: `/api/v1/projects/${projectId}/api-keys`,
+        method: "GET",
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        data: {
+            page,
+            size,
+        },
+        success: success,
+        error: error,
+    })
+}
+
+function getApiKey(projectId, apiKeyId, success, error) {
+    $.ajax({
+        url: `/api/v1/projects/${projectId}/api-keys/${apiKeyId}`,
+        method: "GET",
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        success: success,
+        error: error,
+    })
+}
+
+function updateApiKey(projectId, apiKeyId, name, description, success, error) {
+    $.ajax({
+        url: `/api/v1/projects/${projectId}/api-keys/${apiKeyId}`,
+        method: "PUT",
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        data: JSON.stringify({
+            name,
+            description,
+        }),
+        success: success,
+        error: error,
+    })
+}
+
+function deleteApiKey(projectId, apiKeyId, success, error) {
+    $.ajax({
+        url: `/api/v1/projects/${projectId}/api-keys/${apiKeyId}`,
+        method: "DELETE",
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        success: success,
+        error: error
+    })
+}
+
+function getApiKeySecret(projectId, apiKeyId, success, error) {
+    $.ajax({
+        url: `/api/v1/projects/${projectId}/api-keys/${apiKeyId}/secret`,
+        method: "GET",
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        success: success,
+        error: error,
+    })
+}
+
+function resetApiKeySecret(projectId, apiKeyId, success, error) {
+    $.ajax({
+        url: `/api/v1/projects/${projectId}/api-keys/${apiKeyId}/secret`,
+        method: "PUT",
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        success: success,
+        error: error
+    })
+}
