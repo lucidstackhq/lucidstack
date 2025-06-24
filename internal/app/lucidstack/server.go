@@ -49,10 +49,16 @@ func (s *Server) Start() {
 	authenticator := auth.NewAuthenticator(s.config.JwtSigningKey)
 	organizationService := service.NewOrganizationService()
 	userService := service.NewUserService(organizationService, authenticator)
+	modelService := service.NewModelService()
+	appService := service.NewAppService()
+	environmentService := service.NewEnvironmentService()
 
 	api.NewHealthCheckApi(router).Register()
 	api.NewUserApi(router, authenticator, userService).Register()
 	api.NewOrganizationApi(router, authenticator, organizationService).Register()
+	api.NewModelApi(router, authenticator, modelService).Register()
+	api.NewAppApi(router, authenticator, appService).Register()
+	api.NewEnvironmentApi(router, authenticator, environmentService).Register()
 
 	router.Delims("[[", "]]")
 	router.LoadHTMLGlob("templates/*")

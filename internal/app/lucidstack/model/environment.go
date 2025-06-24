@@ -2,7 +2,7 @@ package model
 
 import "github.com/kamva/mgm/v3"
 
-type Model struct {
+type Environment struct {
 	mgm.DefaultModel `bson:",inline"`
 	Name             string `bson:"name" json:"name"`
 	Description      string `bson:"description" json:"description"`
