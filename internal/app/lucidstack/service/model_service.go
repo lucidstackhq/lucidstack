@@ -142,6 +142,25 @@ func (s *ModelService) Delete(ctx context.Context, modelID string, organizationI
 	return modelData, nil
 }
 
+func (s *ModelService) Exists(ctx context.Context, modelID string, organizationID string) (bool, error) {
+	id, err := primitive.ObjectIDFromHex(modelID)
+
+	if err != nil {
+		return false, err
+	}
+
+	count, err := mgm.Coll(&model.Model{}).CountDocuments(ctx, bson.M{
+		field.ID:          id,
+		"organization_id": organizationID,
+	})
+
+	if err != nil {
+		return false, err
+	}
+
+	return count > 0, nil
+}
+
 func (s *ModelService) nameExists(ctx context.Context, name string, organizationID string) (bool, error) {
 	count, err := mgm.Coll(&model.Model{}).CountDocuments(ctx, bson.M{"name": name, "organization_id": organizationID})
 
