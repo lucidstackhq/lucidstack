@@ -5,6 +5,8 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/kamva/mgm/v3"
+	"github.com/lucidstackhq/lucidstack/internal/app/lucidstack/api"
+	"github.com/lucidstackhq/lucidstack/internal/app/lucidstack/service"
 	"github.com/lucidstackhq/lucidstack/internal/pkg/auth"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"log"
@@ -44,7 +46,13 @@ func (s *Server) Start() {
 		AllowCredentials: true,
 	}))
 
-	_ = auth.NewAuthenticator(s.config.JwtSigningKey)
+	authenticator := auth.NewAuthenticator(s.config.JwtSigningKey)
+	organizationService := service.NewOrganizationService()
+	userService := service.NewUserService(organizationService, authenticator)
+
+	api.NewHealthCheckApi(router).Register()
+	api.NewUserApi(router, authenticator, userService).Register()
+	api.NewOrganizationApi(router, authenticator, organizationService).Register()
 
 	router.Delims("[[", "]]")
 	router.LoadHTMLGlob("templates/*")

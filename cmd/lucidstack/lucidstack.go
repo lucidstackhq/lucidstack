@@ -12,5 +12,5 @@ func main() {
 		MongoEndpoint: env.GetOrDefault("MONGO_ENDPOINT", "mongodb://localhost:27017"),
 		MongoDatabase: env.GetOrDefault("MONGO_DB", "lucidstack"),
 		JwtSigningKey: env.GetOrDefault("JWT_KEY", "secret"),
-	})
+	}).Start()
 }
