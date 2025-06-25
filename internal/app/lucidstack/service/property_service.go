@@ -43,11 +43,20 @@ func (s *PropertyService) Create(ctx context.Context, modelID string, request *r
 		return nil, fmt.Errorf("property %s already exists", request.Name)
 	}
 
+	if request.DataSchema != nil && request.DefaultValue != nil {
+		err = request.DataSchema.Validate(request.DefaultValue)
+
+		if err != nil {
+			return nil, err
+		}
+	}
+
 	property := &model.Property{
 		ModelID:        modelID,
 		Name:           request.Name,
 		Description:    request.Description,
 		DataSchema:     request.DataSchema,
+		DefaultValue:   request.DefaultValue,
 		CreatorID:      creatorID,
 		OrganizationID: organizationID,
 	}
@@ -110,6 +119,32 @@ func (s *PropertyService) Update(ctx context.Context, propertyID string, request
 	}
 
 	property.Description = request.Description
+
+	err = mgm.Coll(property).UpdateWithCtx(ctx, property)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return property, nil
+}
+
+func (s *PropertyService) UpdateDefaultValue(ctx context.Context, propertyID string, request *request.PropertyDefaultValueRequest, modelID string, organizationID string) (*model.Property, error) {
+	property, err := s.Get(ctx, propertyID, modelID, organizationID)
+
+	if err != nil {
+		return nil, err
+	}
+
+	if property.DataSchema != nil && request.DefaultValue != nil {
+		err = property.DataSchema.Validate(request.DefaultValue)
+
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	property.DefaultValue = request.DefaultValue
 
 	err = mgm.Coll(property).UpdateWithCtx(ctx, property)
 

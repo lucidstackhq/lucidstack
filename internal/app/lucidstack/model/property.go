@@ -8,6 +8,7 @@ type Property struct {
 	Name             string      `json:"name"`
 	Description      string      `json:"description"`
 	DataSchema       *DataSchema `json:"data_schema" bson:"data_schema"`
+	DefaultValue     interface{} `json:"default_value" bson:"default_value"`
 	CreatorID        string      `json:"creator_id" bson:"creator_id"`
 	OrganizationID   string      `json:"organization_id" bson:"organization_id"`
 }

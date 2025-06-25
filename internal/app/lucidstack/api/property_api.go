@@ -149,4 +149,33 @@ func (a *PropertyApi) Register() {
 
 		c.JSON(http.StatusOK, property)
 	})
+
+	a.router.PUT("/api/v1/models/:modelID/properties/:propertyID/default-value", func(c *gin.Context) {
+		ctx, cancel := context.WithTimeout(c, 5*time.Second)
+		defer cancel()
+
+		au, err := a.authenticator.ValidateUserContext(c)
+		if err != nil {
+			api.Error(c, http.StatusUnauthorized, err)
+			return
+		}
+
+		modelID := c.Param("modelID")
+		propertyID := c.Param("propertyID")
+
+		var req request.PropertyDefaultValueRequest
+		if err := c.ShouldBindJSON(&req); err != nil {
+			api.Error(c, http.StatusBadRequest, err)
+			return
+		}
+
+		property, err := a.propertyService.UpdateDefaultValue(ctx, propertyID, &req, modelID, au.OrganizationID)
+
+		if err != nil {
+			api.Error(c, http.StatusInternalServerError, err)
+			return
+		}
+
+		c.JSON(http.StatusOK, property)
+	})
 }
