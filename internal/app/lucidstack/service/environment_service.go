@@ -139,6 +139,25 @@ func (s *EnvironmentService) Delete(ctx context.Context, environmentID string, o
 	return environment, nil
 }
 
+func (s *EnvironmentService) Exists(ctx context.Context, environmentID string, organizationID string) (bool, error) {
+	id, err := primitive.ObjectIDFromHex(environmentID)
+
+	if err != nil {
+		return false, err
+	}
+
+	count, err := mgm.Coll(&model.Environment{}).CountDocuments(ctx, bson.M{
+		field.ID:          id,
+		"organization_id": organizationID,
+	})
+
+	if err != nil {
+		return false, err
+	}
+
+	return count > 0, nil
+}
+
 func (s *EnvironmentService) nameExists(ctx context.Context, name string, organizationID string) (bool, error) {
 	count, err := mgm.Coll(&model.Environment{}).CountDocuments(ctx, bson.M{"name": name, "organization_id": organizationID})
 

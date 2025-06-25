@@ -52,6 +52,7 @@ func (s *Server) Start() {
 	modelService := service.NewModelService()
 	appService := service.NewAppService()
 	environmentService := service.NewEnvironmentService()
+	entityService := service.NewEntityService(modelService, environmentService)
 
 	api.NewHealthCheckApi(router).Register()
 	api.NewUserApi(router, authenticator, userService).Register()
@@ -59,6 +60,7 @@ func (s *Server) Start() {
 	api.NewModelApi(router, authenticator, modelService).Register()
 	api.NewAppApi(router, authenticator, appService).Register()
 	api.NewEnvironmentApi(router, authenticator, environmentService).Register()
+	api.NewEntityApi(router, authenticator, entityService).Register()
 
 	router.Delims("[[", "]]")
 	router.LoadHTMLGlob("templates/*")
