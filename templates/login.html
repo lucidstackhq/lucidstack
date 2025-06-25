@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+[[template "public-header.html" .]]
+<body>
+[[template "public-navbar.html" .]]
+<div class="container">
+    <div class="row text-center" style="margin-top: 3rem;">
+        <div class="col-lg-4 offset-lg-4">
+            <div class="card">
+                <div class="card-body">
+                    <h4>Login To Your Account</h4>
+                    <div id="message"></div>
+                    <hr>
+                    <form>
+                        <div class="mb-3 form-floating">
+                            <input type="text" class="form-control" placeholder="Organization Name" id="organization-name">
+                            <label for="organization-name" class="form-label">Organization Name</label>
+                        </div>
+                        <div class="mb-3 form-floating">
+                            <input type="text" class="form-control" placeholder="Username" id="username">
+                            <label for="username" class="form-label">Username</label>
+                        </div>
+                        <div class="mb-3 form-floating">
+                            <input type="password" class="form-control" placeholder="Password" id="password">
+                            <label for="password" class="form-label">Password</label>
+                        </div>
+                        <div class="mb-3">
+                            <button class="btn btn-primary w-100" id="login-btn">Login To Your Account</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+[[template "public-footer.html" .]]
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#login-btn").click(function(e) {
+            e.preventDefault()
+            let username = $("#username").val().trim()
+            let password = $("#password").val().trim()
+            let organizationName = $("#organization-name").val().trim()
+
+            if (organizationName === "") {
+                displayError($("#message"), "Organization name is required")
+                return
+            }
+
+            if (username === "") {
+                displayError($("#message"), "Username is required")
+                return
+            }
+
+            if (password === "") {
+                displayError($("#message"), "Password is required")
+                return
+            }
+
+            getUserToken(username, password, organizationName, function (data) {
+                localStorage.setItem("token", data.token)
+                window.location.href = "/"
+            }, function (data) {
+                displayError($("#message"), data.responseJSON.message)
+            })
+        })
+    })
+</script>
+</body>
+</html>

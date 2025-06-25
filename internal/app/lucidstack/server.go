@@ -87,4 +87,20 @@ func (s *Server) registerPages(router *gin.Engine) {
 	router.GET("/", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "index.html", gin.H{})
 	})
+
+	router.GET("/logout", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "logout.html", gin.H{})
+	})
+
+	router.GET("/join", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "join.html", gin.H{})
+	})
+
+	router.GET("/login", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "login.html", gin.H{})
+	})
+
+	router.GET("/home", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "home.html", gin.H{})
+	})
 }
