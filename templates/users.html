@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+[[template "header.html" .]]
+<body>
+[[template "navbar.html" .]]
+<div class="container">
+    <div class="row" style="margin-top: 2rem">
+        <div class="col-md-6 offset-lg-3">
+            <div class="row">
+                <div class="col-lg-9">
+                    <h2>Users</h2>
+                </div>
+                <div class="col-lg-3">
+                    <button class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#add-user-modal">
+                        Add User
+                    </button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <hr>
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Administrator</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody id="users"></tbody>
+                    </table>
+                    <button class="btn btn-outline-secondary w-100" id="load-more-btn">Load More Users</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="add-user-modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add New User</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="add-user-message"></div>
+                <form>
+                    <div class="mb-3 form-floating">
+                        <input type="text" class="form-control" id="username" placeholder="Username">
+                        <label for="username" class="form-label">Username</label>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="admin">
+                        <label class="form-check-label" for="admin">Administrator</label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="add-user-btn">Add User</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/x-handlebars-template" id="users-template">
+    {{#each users}}
+        <tr>
+            <td>{{username}}</td>=
+            <td><span class="badge bg-success">{{admin}}</span></td>
+            <td>
+                <a href="/users/{{id}}" class="btn btn-secondary btn-sm">Manage</a>
+            </td>
+        </tr>
+    {{/each}}
+</script>
+[[template "footer.html" .]]
+<script type="text/javascript">
+    const usersTemplate = Handlebars.compile($("#users-template").html())
+
+    function renderUsers(page, size) {
+        listUsers(page, size, function (data) {
+            $("#users").append(usersTemplate({users: data}))
+            if (data.length < size) {
+                $("#load-more-btn").hide()
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        let currentPage = 0
+        let pageSize = 50
+        renderUsers(currentPage, pageSize)
+        $("#load-more-btn").click(function (e) {
+            e.preventDefault()
+            currentPage = currentPage + 1
+            renderUsers(currentPage, pageSize)
+        })
+
+        $("#add-user-btn").click(function (e) {
+            e.preventDefault()
+
+            let username = $("#username").val().trim()
+            let admin = $("#admin").is(":checked")
+
+            if (username === "") {
+                displayError($("#add-user-message"), "Username is required")
+                return
+            }
+
+            createUser(username, admin, function (data) {
+                displaySuccess($("#add-user-message"), `User account added successfully, password is <pre>${data.password}</pre>`)
+                $("#users").prepend(usersTemplate({users: [data.user]}))
+            }, function (data) {
+                displayError($("#add-user-message"), data.responseJSON.message)
+            })
+        })
+    })
+</script>
+</body>
+</html>

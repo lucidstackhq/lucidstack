@@ -98,3 +98,82 @@ function updateOrganization(billingEmail, success, error) {
         error: error,
     })
 }
+
+function createUser(username, admin, success, error) {
+    $.ajax({
+        method: "POST",
+        url: "/api/v1/users",
+        dataType: "json",
+        contentType: "application/json",
+        data: JSON.stringify({
+            username: username,
+            admin: admin,
+        }),
+        headers: getHeaders(),
+        success: success,
+        error: error,
+    })
+}
+
+function listUsers(page, size, success, error) {
+    $.ajax({
+        method: "GET",
+        url: "/api/v1/users",
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        success: success,
+        error: error,
+    })
+}
+
+function getUser(userId, success, error) {
+    $.ajax({
+        method: "GET",
+        url: `/api/v1/users/${userId}`,
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        success: success,
+        error: error,
+    })
+}
+
+function deleteUser(userId, success, error) {
+    $.ajax({
+        method: "DELETE",
+        url: `/api/v1/users/${userId}`,
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        success: success,
+        error: error,
+    })
+}
+
+function resetUserPassword(userId, success, error) {
+    $.ajax({
+        method: "PUT",
+        url: `/api/v1/users/${userId}/password`,
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        success: success,
+        error: error,
+    })
+}
+
+function updateUserAdmin(userId, admin, success, error) {
+    $.ajax({
+        method: "PUT",
+        url: `/api/v1/users/${userId}/admin`,
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        data: JSON.stringify({
+            admin: admin,
+        }),
+        success: success,
+        error: error,
+    })
+}

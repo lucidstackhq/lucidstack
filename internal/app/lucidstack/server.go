@@ -111,4 +111,14 @@ func (s *Server) registerPages(router *gin.Engine) {
 	router.GET("/organization", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "organization.html", gin.H{})
 	})
+
+	router.GET("/users", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "users.html", gin.H{})
+	})
+
+	router.GET("/users/:userID", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "user.html", gin.H{
+			"user_id": c.Params.ByName("userID"),
+		})
+	})
 }
