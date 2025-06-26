@@ -131,4 +131,14 @@ func (s *Server) registerPages(router *gin.Engine) {
 			"app_id": c.Param("appID"),
 		})
 	})
+
+	router.GET("/environments", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "environments.html", gin.H{})
+	})
+
+	router.GET("/environments/:environmentID", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "environment.html", gin.H{
+			"environment_id": c.Param("environmentID"),
+		})
+	})
 }

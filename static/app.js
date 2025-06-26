@@ -273,3 +273,75 @@ function resetAppSecret(appId, success, error) {
         error: error,
     })
 }
+
+function createEnvironment(name, description, success, error) {
+    $.ajax({
+        method: "POST",
+        url: `/api/v1/environments`,
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        data: JSON.stringify({
+            name: name,
+            description: description,
+        }),
+        success: success,
+        error: error,
+    })
+}
+
+function listEnvironments(page, size, success, error) {
+    $.ajax({
+        method: "GET",
+        url: `/api/v1/environments`,
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        data: {
+            page: page,
+            size: size,
+        },
+        success: success,
+        error: error,
+    })
+}
+
+function getEnvironment(environmentId, success, error) {
+    $.ajax({
+        method: "GET",
+        url: `/api/v1/environments/${environmentId}`,
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        success: success,
+        error: error,
+    })
+}
+
+function updateEnvironment(environmentId, name, description, success, error) {
+    $.ajax({
+        method: "PUT",
+        url: `/api/v1/environments/${environmentId}`,
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        data: JSON.stringify({
+            name: name,
+            description: description,
+        }),
+        success: success,
+        error: error,
+    })
+}
+
+function deleteEnvironment(environmentId, success, error) {
+    $.ajax({
+        method: "DELETE",
+        url: `/api/v1/environments/${environmentId}`,
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        success: success,
+        error: error,
+    })
+}

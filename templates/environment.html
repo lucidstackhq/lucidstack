@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+[[template "header.html" .]]
+<body>
+[[template "navbar.html" .]]
+<div class="container">
+    <div class="row" style="margin-top: 2rem;">
+        <div class="col-lg-6 offset-lg-3">
+            <div class="row">
+                <div class="col-lg-9">
+                    <h2 id="name"></h2>
+                </div>
+                <div class="col-lg-3">
+                    <button class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#update-environment-modal">Edit</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <hr>
+                    <blockquote class="blockquote" id="description"></blockquote>
+                </div>
+            </div>
+            <div class="row" style="margin-top: 2rem;">
+                <div class="col-lg-12">
+                    <h5>Danger Zone</h5>
+                    <hr>
+                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-environment-modal">Delete Environment</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="update-environment-modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Environment</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="update-environment-message"></div>
+                <form>
+                    <div class="mb-3 form-floating">
+                        <input type="text" class="form-control" id="update-environment-name" placeholder="Name">
+                        <label for="update-environment-name" class="form-label">Name</label>
+                    </div>
+                    <div class="mb-3 form-floating">
+                        <textarea class="form-control" id="update-environment-description" placeholder="Description" style="height: 100px"></textarea>
+                        <label for="update-environment-description" class="form-label">Description</label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="update-environment-btn">Save Changes</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="delete-environment-modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Delete Environment</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="delete-environment-message"></div>
+                <p>Are you sure you want to permanently delete this environment?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" id="delete-environment-btn">Delete Environment</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="reset-environment-secret-modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Reset Environment Secret</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="reset-environment-secret-message"></div>
+                <p>Are you sure you want to reset this environment's secret?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning" id="reset-environment-secret-btn">Reset Secret</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+[[template "footer.html" .]]
+<script type="text/javascript">
+    const environmentId = "[[.environment_id]]"
+
+    $(document).ready(function () {
+        getEnvironment(environmentId, function (data) {
+            $("#name").html(data.name);
+            $("#description").html(data.description);
+            $("#update-environment-name").val(data.name);
+            $("#update-environment-description").val(data.description);
+        })
+
+        $("#update-environment-btn").click(function (e) {
+            e.preventDefault();
+            let name = $("#update-environment-name").val().trim()
+            let description = $("#update-environment-description").val().trim()
+
+            if (name === "") {
+                displayError($("#update-environment-message"), "Name is required")
+                return
+            }
+
+            updateEnvironment(environmentId, name, description, function (data) {
+                displaySuccess($("#update-environment-message"), "Changes saved successfully")
+                $("#name").html(data.name);
+                $("#description").html(data.description);
+            }, function (data) {
+                displayError($("#update-environment-message"), data.responseJSON.message)
+            })
+        })
+
+        $("#delete-environment-btn").click(function (e) {
+            e.preventDefault();
+            deleteEnvironment(environmentId, function (data) {
+                window.location.href = "/environments"
+            }, function (data) {
+                displayError($("#delete-environment-message"), data.responseJSON.message)
+            })
+        })
+    })
+</script>
+</body>
+</html>
