@@ -147,4 +147,10 @@ func (s *Server) registerPages(router *gin.Engine) {
 			"model_id": c.Param("modelID"),
 		})
 	})
+
+	router.GET("/models/:modelID/entities", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "entities.html", gin.H{
+			"model_id": c.Param("modelID"),
+		})
+	})
 }

@@ -417,3 +417,37 @@ function deleteModel(modelId, success, error) {
         error: error
     })
 }
+
+function createEntity(modelId, name, description, environmentId, success, error) {
+    $.ajax({
+        method: "POST",
+        url: `/api/v1/entities`,
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        data: JSON.stringify({
+            name: name,
+            description: description,
+            environment_id: environmentId,
+            model_id: modelId,
+        }),
+        success: success,
+        error: error,
+    })
+}
+
+function listEntities(modelId, environmentId, page, size, success, error) {
+    $.ajax({
+        method: "GET",
+        url: `/api/v1/models/${modelId}/environments/${environmentId}/entities`,
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        data: {
+            page: page,
+            size: size,
+        },
+        success: success,
+        error: error,
+    })
+}
