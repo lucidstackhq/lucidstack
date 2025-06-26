@@ -107,4 +107,8 @@ func (s *Server) registerPages(router *gin.Engine) {
 	router.GET("/account", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "account.html", gin.H{})
 	})
+
+	router.GET("/organization", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "organization.html", gin.H{})
+	})
 }

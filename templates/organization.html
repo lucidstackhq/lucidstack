@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+[[template "header.html" .]]
+<body>
+[[template "navbar.html" .]]
+<div class="container">
+    <div class="row" style="margin-top: 3rem">
+        <div class="col-lg-4 offset-lg-4">
+            <div class="card">
+                <div class="card-body">
+                    <h3>Organization Settings</h3>
+                    <hr>
+                    <div id="update-message"></div>
+                    <form>
+                        <div class="mb-3 form-floating">
+                            <input type="text" class="form-control" id="name" placeholder="Organization Name" disabled>
+                            <label for="name" class="form-label">Organization Name</label>
+                        </div>
+                        <div class="mb-3 form-floating">
+                            <input type="email" class="form-control" id="billing-email" placeholder="Billing Email">
+                            <label for="billing-email" class="form-label">Billing Email</label>
+                        </div>
+                        <div class="mb-3">
+                            <button class="btn btn-primary"  id="update-btn">Save Changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+[[template "footer.html" .]]
+<script type="text/javascript">
+    $(document).ready(function() {
+        getOrganization(function (data) {
+            $("#name").val(data.name);
+            $("#billing-email").val(data.billing_email);
+        })
+
+        $("#update-btn").click(function(e) {
+            e.preventDefault();
+            let billingEmail = $("#billing-email").val().trim();
+
+            if (billingEmail === "") {
+                displayError($("#update-message"), "Billing email is required")
+                return
+            }
+
+            updateOrganization(billingEmail, function (data) {
+                displaySuccess($("#update-message"), "Changes saved successfully")
+            }, function (data) {
+                displayError($("#update-message"), data.responseJSON.message)
+            })
+        })
+    })
+</script>
+</body>
+</html>
