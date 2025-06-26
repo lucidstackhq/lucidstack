@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+[[template "header.html" .]]
+<body>
+[[template "navbar.html" .]]
+<div class="container">
+    <div class="row" style="margin-top: 3rem">
+        <div class="col-lg-4 offset-lg-4">
+            <div class="card">
+                <div class="card-body">
+                    <h3>Basic Information</h3>
+                    <hr>
+                    <form>
+                        <div class="mb-3 form-floating">
+                            <input type="text" class="form-control" id="username" placeholder="Username" disabled>
+                            <label for="username" class="form-label">Username</label>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="margin-top: 3rem">
+        <div class="col-lg-4 offset-lg-4">
+            <div class="card">
+                <div class="card-body">
+                    <h3>Change Password</h3>
+                    <hr>
+                    <div id="change-password-message"></div>
+                    <form>
+                        <div class="mb-3 form-floating">
+                            <input type="password" class="form-control" id="new-password" placeholder="New Password">
+                            <label for="new-password" class="form-label">New Password</label>
+                        </div>
+                        <div class="mb-3 form-floating">
+                            <input type="password" class="form-control" id="confirm-password" placeholder="Confirm Password">
+                            <label for="confirm-password" class="form-label">Confirm Password</label>
+                        </div>
+                        <div class="mb-3">
+                            <button class="btn btn-primary w-100" id="change-password-btn">Change Password</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+[[template "footer.html" .]]
+<script type="text/javascript">
+    $(document).ready(function () {
+        getCurrentUser(function (data) {
+            $("#username").val(data.username);
+        })
+
+        $("#change-password-btn").click(function (e) {
+            e.preventDefault();
+            let password = $("#new-password").val().trim();
+            let confirmPassword = $("#confirm-password").val().trim();
+
+            if (password === "") {
+                displayError($("#change-password-message"), "New password cannot be empty")
+                return
+            }
+
+            if (password !== confirmPassword) {
+                displayError($("#change-password-message"), "Passwords do not match");
+                return
+            }
+
+            changeCurrentUserPassword(password, function (data) {
+                displaySuccess($("#change-password-message"), "Password changed successfully")
+            }, function (data) {
+                displayError($("#change-password-message"), data.responseJSON.message);
+            })
+        })
+    })
+</script>
+</body>
+</html>

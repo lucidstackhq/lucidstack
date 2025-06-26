@@ -44,3 +44,30 @@ function getUserToken(username, password, organizationName, success, error) {
         error: error,
     })
 }
+
+function getCurrentUser(success, error) {
+    $.ajax({
+        method: "GET",
+        url: "/api/v1/users/me",
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        success: success,
+        error: error,
+    })
+}
+
+function changeCurrentUserPassword(password, success, error) {
+    $.ajax({
+        method: "PUT",
+        url: "/api/v1/users/me/password",
+        dataType: "json",
+        contentType: "application/json",
+        data: JSON.stringify({
+            password: password,
+        }),
+        headers: getHeaders(),
+        success: success,
+        error: error,
+    })
+}
