@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+[[template "header.html" .]]
+<body>
+[[template "navbar.html" .]]
+<div class="container">
+    <div class="row" style="margin-top: 2rem;">
+        <div class="col-lg-6 offset-lg-3">
+            <div class="row">
+                <div class="col-lg-9">
+                    <h2 id="name"></h2>
+                </div>
+                <div class="col-lg-3">
+                    <button class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#update-model-modal">Edit</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <hr>
+                    <blockquote class="blockquote" id="description"></blockquote>
+                </div>
+            </div>
+            <div class="row" style="margin-top: 2rem;">
+                <div class="col-lg-12">
+                    <h5>Danger Zone</h5>
+                    <hr>
+                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-model-modal">Delete Model</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="update-model-modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Model</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="update-model-message"></div>
+                <form>
+                    <div class="mb-3 form-floating">
+                        <input type="text" class="form-control" id="update-model-name" placeholder="Name">
+                        <label for="update-model-name" class="form-label">Name</label>
+                    </div>
+                    <div class="mb-3 form-floating">
+                        <textarea class="form-control" id="update-model-description" placeholder="Description" style="height: 100px"></textarea>
+                        <label for="update-model-description" class="form-label">Description</label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="update-model-btn">Save Changes</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="delete-model-modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Delete Model</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="delete-model-message"></div>
+                <p>Are you sure you want to permanently delete this model?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" id="delete-model-btn">Delete Model</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="reset-model-secret-modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Reset Model Secret</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="reset-model-secret-message"></div>
+                <p>Are you sure you want to reset this model's secret?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning" id="reset-model-secret-btn">Reset Secret</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+[[template "footer.html" .]]
+<script type="text/javascript">
+    const modelId = "[[.model_id]]"
+
+    $(document).ready(function () {
+        getModel(modelId, function (data) {
+            $("#name").html(data.name);
+            $("#description").html(data.description);
+            $("#update-model-name").val(data.name);
+            $("#update-model-description").val(data.description);
+        })
+
+        $("#update-model-btn").click(function (e) {
+            e.preventDefault();
+            let name = $("#update-model-name").val().trim()
+            let description = $("#update-model-description").val().trim()
+
+            if (name === "") {
+                displayError($("#update-model-message"), "Name is required")
+                return
+            }
+
+            updateModel(modelId, name, description, function (data) {
+                displaySuccess($("#update-model-message"), "Changes saved successfully")
+                $("#name").html(data.name);
+                $("#description").html(data.description);
+            }, function (data) {
+                displayError($("#update-model-message"), data.responseJSON.message)
+            })
+        })
+
+        $("#delete-model-btn").click(function (e) {
+            e.preventDefault();
+            deleteModel(modelId, function (data) {
+                window.location.href = "/home"
+            }, function (data) {
+                displayError($("#delete-model-message"), data.responseJSON.message)
+            })
+        })
+    })
+</script>
+</body>
+</html>

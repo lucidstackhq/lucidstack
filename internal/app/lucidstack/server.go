@@ -141,4 +141,10 @@ func (s *Server) registerPages(router *gin.Engine) {
 			"environment_id": c.Param("environmentID"),
 		})
 	})
+
+	router.GET("/models/:modelID", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "model.html", gin.H{
+			"model_id": c.Param("modelID"),
+		})
+	})
 }

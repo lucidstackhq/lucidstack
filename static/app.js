@@ -345,3 +345,75 @@ function deleteEnvironment(environmentId, success, error) {
         error: error,
     })
 }
+
+function createModel(name, description, success, error) {
+    $.ajax({
+        method: "POST",
+        url: `/api/v1/models`,
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        data: JSON.stringify({
+            name: name,
+            description: description,
+        }),
+        success: success,
+        error: error,
+    })
+}
+
+function listModels(page, size, success, error) {
+    $.ajax({
+        method: "GET",
+        url: `/api/v1/models`,
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        data: {
+            page: page,
+            size: size,
+        },
+        success: success,
+        error: error,
+    })
+}
+
+function getModel(modelId, success, error) {
+    $.ajax({
+        method: "GET",
+        url: `/api/v1/models/${modelId}`,
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        success: success,
+        error: error,
+    })
+}
+
+function updateModel(modelId, name, description, success, error) {
+    $.ajax({
+        method: "PUT",
+        url: `/api/v1/models/${modelId}`,
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        data: JSON.stringify({
+            name: name,
+            description: description,
+        }),
+        success: success,
+        error: error,
+    })
+}
+
+function deleteModel(modelId, success, error) {
+    $.ajax({
+        method: "DELETE",
+        url: `/api/v1/models/${modelId}`,
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        success: success,
+        error: error
+    })
+}
