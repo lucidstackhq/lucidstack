@@ -177,3 +177,35 @@ function updateUserAdmin(userId, admin, success, error) {
         error: error,
     })
 }
+
+function createApp(name, description, success, error) {
+    $.ajax({
+        method: "POST",
+        url: `/api/v1/apps`,
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        data: JSON.stringify({
+            name: name,
+            description: description,
+        }),
+        success: success,
+        error: error,
+    })
+}
+
+function listApps(page, size, success, error) {
+    $.ajax({
+        method: "GET",
+        url: `/api/v1/apps`,
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        data: {
+            page: page,
+            size: size,
+        },
+        success: success,
+        error: error,
+    })
+}
