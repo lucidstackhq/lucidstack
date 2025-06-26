@@ -142,4 +142,27 @@ func (a *EnvironmentApi) Register() {
 
 		c.JSON(http.StatusOK, environment)
 	})
+
+	a.router.GET("/api/v1/environments/search", func(c *gin.Context) {
+		ctx, cancel := context.WithTimeout(c, 5*time.Second)
+		defer cancel()
+
+		au, err := a.authenticator.ValidateUserContext(c)
+		if err != nil {
+			api.Error(c, http.StatusUnauthorized, err)
+			return
+		}
+
+		query := c.Query("query")
+		page, size := api.Page(c)
+
+		environments, err := a.environmentService.Search(ctx, query, au.OrganizationID, page, size)
+
+		if err != nil {
+			api.Error(c, http.StatusInternalServerError, err)
+			return
+		}
+
+		c.JSON(http.StatusOK, environments)
+	})
 }

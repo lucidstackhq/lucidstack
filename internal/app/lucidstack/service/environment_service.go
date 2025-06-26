@@ -158,6 +158,27 @@ func (s *EnvironmentService) Exists(ctx context.Context, environmentID string, o
 	return count > 0, nil
 }
 
+func (s *EnvironmentService) Search(ctx context.Context, query string, organizationID string, page int64, size int64) ([]*model.Environment, error) {
+	if query == "" {
+		return s.List(ctx, organizationID, page, size)
+	}
+
+	environments := make([]*model.Environment, 0)
+
+	err := mgm.Coll(&model.Environment{}).SimpleFindWithCtx(ctx, &environments, bson.M{
+		operator.Text: bson.M{
+			"$search": query,
+		},
+		"organization_id": organizationID,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	return environments, nil
+}
+
 func (s *EnvironmentService) nameExists(ctx context.Context, name string, organizationID string) (bool, error) {
 	count, err := mgm.Coll(&model.Environment{}).CountDocuments(ctx, bson.M{"name": name, "organization_id": organizationID})
 
