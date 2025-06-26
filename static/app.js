@@ -209,3 +209,67 @@ function listApps(page, size, success, error) {
         error: error,
     })
 }
+
+function getApp(appId, success, error) {
+    $.ajax({
+        method: "GET",
+        url: `/api/v1/apps/${appId}`,
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        success: success,
+        error: error,
+    })
+}
+
+function updateApp(appId, name, description, success, error) {
+    $.ajax({
+        method: "PUT",
+        url: `/api/v1/apps/${appId}`,
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        data: JSON.stringify({
+            name: name,
+            description: description,
+        }),
+        success: success,
+        error: error,
+    })
+}
+
+function deleteApp(appId, success, error) {
+    $.ajax({
+        method: "DELETE",
+        url: `/api/v1/apps/${appId}`,
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        success: success,
+        error: error,
+    })
+}
+
+function getAppSecret(appId, success, error) {
+    $.ajax({
+        method: "GET",
+        url: `/api/v1/apps/${appId}/secret`,
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        success: success,
+        error: error,
+    })
+}
+
+function resetAppSecret(appId, success, error) {
+    $.ajax({
+        method: "PUT",
+        url: `/api/v1/apps/${appId}/secret`,
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        success: success,
+        error: error,
+    })
+}
