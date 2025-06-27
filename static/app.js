@@ -1,3 +1,12 @@
+$.ajaxSetup({
+    statusCode: {
+        401: function(jqxhr, textStatus, errorThrown) {
+            localStorage.clear()
+            window.location.href = "/login"
+        }
+    }
+})
+
 function displayError(parent, message) {
     parent.html(`<div class="alert alert-danger">${message}</div>`);
 }
@@ -447,6 +456,242 @@ function listEntities(modelId, environmentId, page, size, success, error) {
             page: page,
             size: size,
         },
+        success: success,
+        error: error,
+    })
+}
+
+function createProperty(modelId, name, description, dataSchema, defaultValue, success, error) {
+    $.ajax({
+        method: "POST",
+        url: `/api/v1/models/${modelId}/properties`,
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        data: JSON.stringify({
+            name: name,
+            description: description,
+            data_schema: dataSchema,
+            default_value: defaultValue,
+        }),
+        success: success,
+        error: error,
+    })
+}
+
+function listProperties(modelId, page, size, success, error) {
+    $.ajax({
+        method: "GET",
+        url: `/api/v1/models/${modelId}/properties`,
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        data: {
+            page: page,
+            size: size,
+        },
+        success: success,
+        error: error,
+    })
+}
+
+function getProperty(propertyId, modelId, success, error) {
+    $.ajax({
+        method: "GET",
+        url: `/api/v1/models/${modelId}/properties/${propertyId}`,
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        success: success,
+        error: error,
+    })
+}
+
+function updateProperty(propertyId, name, description, modelId, success, error) {
+    $.ajax({
+        method: "PUT",
+        url: `/api/v1/models/${modelId}/properties/${propertyId}`,
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        data: JSON.stringify({
+            name: name,
+            description: description,
+        }),
+        success: success,
+        error: error,
+    })
+}
+
+function deleteProperty(propertyId, modelId, success, error) {
+    $.ajax({
+        method: "DELETE",
+        url: `/api/v1/models/${modelId}/properties/${propertyId}`,
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        success: success,
+        error: error,
+    })
+}
+
+function updatePropertyDefaultValue(propertyId, defaultValue, modelId, success, error) {
+    $.ajax({
+        method: "PUT",
+        url: `/api/v1/models/${modelId}/properties/${propertyId}/default-value`,
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        data: JSON.stringify({
+            default_value: defaultValue,
+        }),
+        success: success,
+        error: error,
+    })
+}
+
+function createAction(modelId, name, description, inputSchema, outputSchema, success, error) {
+    $.ajax({
+        method: "POST",
+        url: `/api/v1/models/${modelId}/actions`,
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        data: JSON.stringify({
+            name: name,
+            description: description,
+            input_schema: inputSchema,
+            output_schema: outputSchema,
+        }),
+        success: success,
+        error: error,
+    })
+}
+
+function listActions(modelId, page, size, success, error) {
+    $.ajax({
+        method: "GET",
+        url: `/api/v1/models/${modelId}/actions`,
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        data: {
+            page: page,
+            size: size,
+        },
+        success: success,
+        error: error,
+    })
+}
+
+function getAction(actionId, modelId, success, error) {
+    $.ajax({
+        method: "GET",
+        url: `/api/v1/models/${modelId}/actions/${actionId}`,
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        success: success,
+        error: error,
+    })
+}
+
+function updateAction(actionId, name, description, modelId, success, error) {
+    $.ajax({
+        method: "PUT",
+        url: `/api/v1/models/${modelId}/actions/${actionId}`,
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        data: JSON.stringify({
+            name: name,
+            description: description,
+        }),
+        success: success,
+        error: error,
+    })
+}
+
+function deleteAction(actionId, modelId, success, error) {
+    $.ajax({
+        method: "DELETE",
+        url: `/api/v1/models/${modelId}/actions/${actionId}`,
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        success: success,
+        error: error,
+    })
+}
+
+function createEvent(modelId, name, description, dataSchema, success, error) {
+    $.ajax({
+        method: "POST",
+        url: `/api/v1/models/${modelId}/events`,
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        data: JSON.stringify({
+            name: name,
+            description: description,
+            data_schema: dataSchema,
+        }),
+        success: success,
+        error: error,
+    })
+}
+
+function listEvents(modelId, page, size, success, error) {
+    $.ajax({
+        method: "GET",
+        url: `/api/v1/models/${modelId}/events`,
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        data: {
+            page: page,
+            size: size,
+        },
+        success: success,
+        error: error,
+    })
+}
+
+function getEvent(eventId, modelId, success, error) {
+    $.ajax({
+        method: "GET",
+        url: `/api/v1/models/${modelId}/events/${eventId}`,
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        success: success,
+        error: error,
+    })
+}
+
+function updateEvent(eventId, name, description, modelId, success, error) {
+    $.ajax({
+        method: "PUT",
+        url: `/api/v1/models/${modelId}/events/${eventId}`,
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        data: JSON.stringify({
+            name: name,
+            description: description,
+        }),
+        success: success,
+        error: error,
+    })
+}
+
+function deleteEvent(eventId, modelId, success, error) {
+    $.ajax({
+        method: "DELETE",
+        url: `/api/v1/models/${modelId}/events/${eventId}`,
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
         success: success,
         error: error,
     })

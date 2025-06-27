@@ -10,5 +10,6 @@ type ActionCreationRequest struct {
 }
 
 type ActionUpdateRequest struct {
-	Desscription string `json:"description"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
 }

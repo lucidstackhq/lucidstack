@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/kamva/mgm/v3"
 	"github.com/kamva/mgm/v3/field"
+	"github.com/kamva/mgm/v3/operator"
 	"github.com/lucidstackhq/lucidstack/internal/app/lucidstack/model"
 	"github.com/lucidstackhq/lucidstack/internal/app/lucidstack/request"
 	"go.mongodb.org/mongo-driver/bson"
@@ -107,6 +108,27 @@ func (s *EventService) Update(ctx context.Context, eventID string, request *requ
 
 	if err != nil {
 		return nil, err
+	}
+
+	if request.Name != "" {
+		count, err := mgm.Coll(event).CountDocuments(ctx, bson.M{
+			field.ID: bson.M{
+				operator.Ne:       bson.M{operator.Ne: event.ID},
+				"name":            request.Name,
+				"model_id":        modelID,
+				"organization_id": organizationID,
+			},
+		})
+
+		if err != nil {
+			return nil, err
+		}
+
+		if count > 0 {
+			return nil, fmt.Errorf("event %s already exists", request.Name)
+		}
+
+		event.Name = request.Name
 	}
 
 	event.Description = request.Description

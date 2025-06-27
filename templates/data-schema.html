@@ -1,0 +1,57 @@
+[[define "data-schema.html"]]
+<script type="text/x-handlebars-template" id="data-schema-input-template">
+    <div class="card" style="margin-top: 0.5rem">
+        <div class="card-body">
+            <h4>{{title}}</h4>
+            <hr>
+            <div id="data-schema-input-{{id}}">
+                {{#if field}}
+                    <div class="mb-3 form-floating">
+                        <input type="text" class="form-control" id="data-schema-input-key-{{id}}" placeholder="Field Key">
+                        <label for="data-schema-input-key-{{id}}">Field Key</label>
+                    </div>
+                {{/if}}
+                <div class="mb-3">
+                    <label for="data-schema-input-data-type-{{id}}">Data Type</label>
+                    <select class="form-select data-schema-input-data-type-select" data-id="{{id}}" id="data-schema-input-data-type-{{id}}">
+                        <option value="string">String</option>
+                        <option value="integer">Integer</option>
+                        <option value="float">Float</option>
+                        <option value="boolean">Boolean</option>
+                        <option value="object">Object</option>
+                        <option value="array">Array</option>
+                    </select>
+                </div>
+                <h5 style="margin-top: 1rem;">Constraints</h5>
+                <hr>
+                <div class="mb-3 form-floating">
+                    <input type="text" class="form-control" id="data-schema-input-constraint-min-{{id}}" placeholder="Minimum Value">
+                    <label for="data-schema-input-constraint-min-{{id}}">Minimum Value</label>
+                </div>
+                <div class="mb-3 form-floating">
+                    <input type="text" class="form-control" id="data-schema-input-constraint-max-{{id}}" placeholder="Maximum Value">
+                    <label for="data-schema-input-constraint-max-{{id}}">Maximum Value</label>
+                </div>
+                <div class="mb-3 form-floating">
+                    <input type="number" class="form-control" id="data-schema-input-constraint-min-length-{{id}}" placeholder="Minimum Length">
+                    <label for="data-schema-input-constraint-min-length-{{id}}">Minimum Length</label>
+                </div>
+                <div class="mb-3 form-floating">
+                    <input type="number" class="form-control" id="data-schema-input-constraint-max-length-{{id}}" placeholder="Maximum Length">
+                    <label for="data-schema-input-constraint-max-length-{{id}}">Maximum Length</label>
+                </div>
+                <div class="mb-3 form-floating">
+                    <input type="text" class="form-control" id="data-schema-input-constraint-pattern-{{id}}" placeholder="Pattern">
+                    <label for="data-schema-input-constraint-pattern-{{id}}">Pattern</label>
+                </div>
+                <div id="data-schema-input-elements-schema-{{id}}" style="display: none"></div>
+                <div id="data-schema-input-fields-schema-{{id}}" style="display: none">
+                    <div id="data-schema-input-fields-schema-container-{{id}}"></div>
+                    <button class="btn btn-primary btn-sm data-schema-input-fields-schema-add-btn" id="data-schema-input-fields-schema-add-btn-{{id}}" data-id="{{id}}" style="margin-top: 0.5rem;">Add Field</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+<script type="text/javascript" src="/static/data-schema.js"></script>
+[[end]]

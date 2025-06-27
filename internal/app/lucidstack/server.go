@@ -153,4 +153,22 @@ func (s *Server) registerPages(router *gin.Engine) {
 			"model_id": c.Param("modelID"),
 		})
 	})
+
+	router.GET("/models/:modelID/properties", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "properties.html", gin.H{
+			"model_id": c.Param("modelID"),
+		})
+	})
+
+	router.GET("/models/:modelID/actions", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "actions.html", gin.H{
+			"model_id": c.Param("modelID"),
+		})
+	})
+
+	router.GET("/models/:modelID/events", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "events.html", gin.H{
+			"model_id": c.Param("modelID"),
+		})
+	})
 }

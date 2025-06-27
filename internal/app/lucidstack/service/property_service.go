@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/kamva/mgm/v3"
 	"github.com/kamva/mgm/v3/field"
+	"github.com/kamva/mgm/v3/operator"
 	"github.com/lucidstackhq/lucidstack/internal/app/lucidstack/model"
 	"github.com/lucidstackhq/lucidstack/internal/app/lucidstack/request"
 	"go.mongodb.org/mongo-driver/bson"
@@ -116,6 +117,25 @@ func (s *PropertyService) Update(ctx context.Context, propertyID string, request
 
 	if err != nil {
 		return nil, err
+	}
+
+	if request.Name != "" {
+		count, err := mgm.Coll(property).CountDocuments(ctx, bson.M{
+			field.ID:          bson.M{operator.Ne: property.ID},
+			"name":            request.Name,
+			"model_id":        modelID,
+			"organization_id": organizationID,
+		})
+
+		if err != nil {
+			return nil, err
+		}
+
+		if count > 0 {
+			return nil, fmt.Errorf("property %s already exists", request.Name)
+		}
+
+		property.Name = request.Name
 	}
 
 	property.Description = request.Description

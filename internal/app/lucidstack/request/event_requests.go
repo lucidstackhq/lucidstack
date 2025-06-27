@@ -9,5 +9,6 @@ type EventCreationRequest struct {
 }
 
 type EventUpdateRequest struct {
+	Name        string `json:"name"`
 	Description string `json:"description"`
 }
