@@ -35,3 +35,9 @@ body.on("click", ".data-schema-input-fields-schema-add-btn", function (e) {
     let fieldsSchemaContainer = $(`#data-schema-input-fields-schema-container-${inputId}`)
     fieldsSchemaContainer.append(dataSchemaInputTemplate({id: `${inputId}-fields-${fieldsCount}`, title: `Object Field Schema`, field: true}))
 })
+
+body.on("click", ".data-schema-input-delete-field-btn", function (e) {
+    e.preventDefault()
+    let inputId = $(this).data("id")
+    $(`#data-schema-input-${inputId}`).remove()
+})

@@ -1,10 +1,10 @@
 [[define "data-schema.html"]]
 <script type="text/x-handlebars-template" id="data-schema-input-template">
-    <div class="card" style="margin-top: 0.5rem">
+    <div class="card" style="margin-top: 0.5rem" id="data-schema-input-{{id}}">
         <div class="card-body">
             <h4>{{title}}</h4>
             <hr>
-            <div id="data-schema-input-{{id}}">
+            <div>
                 {{#if field}}
                     <div class="mb-3 form-floating">
                         <input type="text" class="form-control" id="data-schema-input-key-{{id}}" placeholder="Field Key">
@@ -49,6 +49,11 @@
                     <div id="data-schema-input-fields-schema-container-{{id}}"></div>
                     <button class="btn btn-primary btn-sm data-schema-input-fields-schema-add-btn" id="data-schema-input-fields-schema-add-btn-{{id}}" data-id="{{id}}" style="margin-top: 0.5rem;">Add Field</button>
                 </div>
+                {{#if field}}
+                    <div class="mb-3">
+                        <button class="btn btn-danger btn-sm data-schema-input-delete-field-btn" data-id="{{id}}">Remove Field</button>
+                    </div>
+                {{/if}}
             </div>
         </div>
     </div>
