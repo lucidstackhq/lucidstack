@@ -216,15 +216,17 @@ func (d *DataSchema) Validate(data interface{}) error {
 			return fmt.Errorf("data is not a object")
 		}
 
-		for key, value := range v {
-			fieldSchema, ok := d.Fields[key]
-			if !ok {
-				return fmt.Errorf("schema for field %s not found", key)
-			}
+		if d.Fields != nil {
+			for key, value := range v {
+				fieldSchema, ok := d.Fields[key]
+				if !ok {
+					return fmt.Errorf("schema for field %s not found", key)
+				}
 
-			err := fieldSchema.Validate(value)
-			if err != nil {
-				return err
+				err := fieldSchema.Validate(value)
+				if err != nil {
+					return err
+				}
 			}
 		}
 
@@ -242,10 +244,12 @@ func (d *DataSchema) Validate(data interface{}) error {
 			return fmt.Errorf("data is not an array")
 		}
 
-		for _, value := range v {
-			err := d.Elements.Validate(value)
-			if err != nil {
-				return err
+		if d.Elements != nil {
+			for _, value := range v {
+				err := d.Elements.Validate(value)
+				if err != nil {
+					return err
+				}
 			}
 		}
 
